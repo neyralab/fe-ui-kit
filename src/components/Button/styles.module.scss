@@ -8,35 +8,35 @@
   height: 38px;
   padding: 0 10px;
 
-  color: var(--neyraBorderNavigationColor);
+  color: var(--borderNavigationColor);
   border-radius: 8px;
 
   cursor: pointer;
 }
 
 .button:hover {
-  color: var(--neyraBorderButtonsHover);
+  color: var(--borderButtonsHover);
 }
 
 .button:disabled {
-  color: var(--neyraBorderButtonsColor);
+  color: var(--borderButtonsColor);
   opacity: 0.5;
   cursor: auto;
 
   &:hover {
-    color: var(--neyraBorderButtonsColor);
+    color: var(--borderButtonsColor);
   }
 }
 
 .outlined {
-  border: 0.8px solid var(--neyraBorderNavigationColor);
+  border: 0.8px solid var(--borderNavigationColor);
 
   &:hover {
-    border-color: var(--neyraBorderButtonsHover);
+    border-color: var(--borderButtonsHover);
   }
 
   &:disabled {
-    border: 0.8px solid var(--neyraBorderButtonsColor);
+    border: 0.8px solid var(--borderButtonsColor);
   }
 }
 

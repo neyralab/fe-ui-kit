@@ -1,0 +1,7 @@
+html[app-theme='light'] {
+  --borderColor: #fff;
+  --borderNavigationColor: rgba(0, 0, 0, 0.3);
+  --borderButtonsHover: #000;
+  --borderButtonsColor: #fff;
+  --chatInput: rgba(0, 0, 0, 0.2);
+}
