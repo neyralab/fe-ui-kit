@@ -1,0 +1,11 @@
+.logo {
+  color: white;
+  cursor: pointer;
+  position: fixed;
+  z-index: 100;
+
+  &:disabled:hover {
+    border: none;
+    cursor: auto;
+  }
+}
