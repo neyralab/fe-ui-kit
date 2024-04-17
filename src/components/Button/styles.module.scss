@@ -14,21 +14,6 @@
   cursor: pointer;
 }
 
-.error {
-  border-color: #b52f12;
-  color: #b52f12;
-}
-
-.active {
-  border-color: #ebf0b9fc;
-  color: #ebf0b9fc;
-}
-
-.warning {
-  border-color: #cab35e;
-  color: #cab35e;
-}
-
 .button:hover {
   color: var(--neyraBorderButtonsHover);
 }
@@ -53,6 +38,21 @@
   &:disabled {
     border: 0.8px solid var(--neyraBorderButtonsColor);
   }
+}
+
+.error {
+  border-color: #b52f12;
+  color: #b52f12;
+}
+
+.active {
+  border-color: #ebf0b9fc;
+  color: #ebf0b9fc;
+}
+
+.warning {
+  border-color: #cab35e;
+  color: #cab35e;
 }
 
 .text {
