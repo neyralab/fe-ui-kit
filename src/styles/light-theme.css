@@ -4,4 +4,5 @@ html[app-theme='light'] {
   --borderButtonsHover: #000;
   --borderButtonsColor: #fff;
   --chatInput: rgba(0, 0, 0, 0.2);
+  --textColor: #000000;
 }

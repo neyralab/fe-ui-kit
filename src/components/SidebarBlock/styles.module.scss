@@ -1,0 +1,47 @@
+.sidebar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+
+  padding: 11px 16px;
+  border: 0.5px solid #5e5e5e;
+  border-radius: 20px 3px 20px 20px;
+  color: var(--textColor);
+  cursor: pointer;
+  transition: all 0.3s ease-in-out;
+}
+
+.sidebar:not(.disabled):hover {
+  border-color: #999;
+  border-width: 1px;
+  transform: scale(1.01);
+}
+
+.disabled {
+  cursor: auto;
+}
+
+.icon {
+  width: 48px;
+  height: 48px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.text {
+  flex: 1;
+  font-size: 14px;
+  font-weight: 600;
+  font-style: normal;
+  line-height: normal;
+}
+
+.additionalText {
+  color: #7d7d7d;
+  font-size: 12px;
+  font-weight: 600;
+  font-style: normal;
+  line-height: normal;
+}

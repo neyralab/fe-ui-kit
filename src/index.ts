@@ -4,7 +4,8 @@ import './styles/light-theme.css';
 import Border from './components/Border';
 import Button from './components/Button';
 import Input from './components/Input';
+import SidebarBlock from './components/SidebarBlock';
 import SmallLogo from './components/SmallLogo';
 import Notification from './components/Notification';
 
-export { Border, Button, Input, SmallLogo, Notification };
+export { Border, Button, Input, SidebarBlock, SmallLogo, Notification };
