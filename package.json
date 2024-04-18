@@ -18,7 +18,8 @@
   },
   "main": "./src/index.ts",
   "exports": {
-    ".": "./src/index.ts"
+    ".": "./src/index.ts",
+    "./icons/border": "./src/icons/border/index.ts"
   },
   "prettier": {
     "trailingComma": "es5",
