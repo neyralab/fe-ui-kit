@@ -1,0 +1,71 @@
+.wrapper {
+  display: flex;
+}
+
+.userMessage {
+  justify-content: end;
+}
+
+.messageContainer {
+  display: inline-flex;
+  flex-direction: column;
+  gap: 16px;
+  padding: 8px 24px;
+  border-radius: 20px;
+  background-color: var(--chatMessage);
+}
+
+.wafeSurfer {
+  gap: 0;
+  width: 270px;
+}
+
+.text {
+  margin: 0;
+  color: var(--textColor);
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 200;
+  line-height: 150%;
+  white-space: pre-line;
+}
+
+.footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.blockButtons {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.button {
+  width: 24px;
+  height: 24px;
+  cursor: pointer;
+}
+
+.button:disabled {
+  cursor: auto;
+}
+
+.timeStamp {
+  color: #656565;
+  opacity: 0.7;
+  font-size: 9px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 13px;
+}
+
+.copyIcon {
+  color: #fff;
+  transition: all 0.5s ease-in;
+}
+
+.copyIconActive {
+  color: #25a82e;
+}

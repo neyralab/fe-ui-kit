@@ -5,4 +5,5 @@ html[app-theme='dark'] {
   --borderButtonsColor: rgba(255, 255, 255, 0.5);
   --chatInput: #131313cc;
   --textColor: #ffffff;
+  --chatMessage: #151515;
 }
