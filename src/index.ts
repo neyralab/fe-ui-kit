@@ -7,6 +7,7 @@ import Input from './components/Input';
 import Sidebar from './components/Sidebar';
 import SidebarBlock from './components/SidebarBlock';
 import ChatMessage from './components/ChatMessage';
+import ChatBlock from './components/ChatBlock';
 import SmallLogo from './components/SmallLogo';
 import Notification from './components/Notification';
 
@@ -17,6 +18,7 @@ export {
   Sidebar,
   SidebarBlock,
   ChatMessage,
+  ChatBlock,
   SmallLogo,
   Notification,
 };

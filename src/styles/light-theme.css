@@ -6,4 +6,7 @@ html[app-theme='light'] {
   --chatInput: rgba(0, 0, 0, 0.2);
   --textColor: #000000;
   --chatMessage: #b9b9b9bb;
+  --tooltipContent: #ffffff;
+  --boxShadow: 0px 2px 8px #ccceda;
+  --iconColor: #202124;
 }

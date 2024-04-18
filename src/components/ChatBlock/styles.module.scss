@@ -1,0 +1,54 @@
+.chatBlock {
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 11px 16px;
+  border: 0.5px dashed #5e5e5e;
+  border-radius: 20px;
+  color: #fff;
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: normal;
+}
+
+.chatBlock:first-child {
+  font-size: 17px;
+  justify-content: flex-start;
+  gap: 0 12px;
+}
+
+.chatBlock:hover {
+  border-color: #ffffff;
+}
+
+.chatBlock:hover .chatCircleIcon {
+  border-color: #ffffff;
+}
+
+.blockContainer {
+  display: flex;
+  align-items: center;
+  gap: 0 12px;
+}
+
+.chatCircleIcon {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  border: 0.5px dashed #5e5e5e;
+  position: relative;
+}
+
+.chatCircleIcon::after {
+  content: '';
+  position: absolute;
+  width: 4px;
+  height: 4px;
+  background-color: #ffffff;
+  border-radius: 50%;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}

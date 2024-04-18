@@ -6,4 +6,7 @@ html[app-theme='dark'] {
   --chatInput: #131313cc;
   --textColor: #ffffff;
   --chatMessage: #151515;
+  --tooltipContent: #242424;
+  --boxShadow: 0px 2px 8px rgba(0, 0, 0, 0.2);
+  --iconColor: #ffffff;
 }

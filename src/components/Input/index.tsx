@@ -42,7 +42,7 @@ const Input = ({
 }: InputProps) => {
   const [isFocus, setIsFocus] = useState(false);
   const [seconds, setSeconds] = useState(0);
-  const [intervalId, setIntervalId] = useState<number | 0>(0);
+  const [intervalId, setIntervalId] = useState<NodeJS.Timeout | null>(null);
   const [disabledAnimation, setDisabledAnimation] = useState(true);
 
   useEffect(() => {
@@ -67,7 +67,7 @@ const Input = ({
     } else if (!startRecord && intervalId) {
       clearInterval(intervalId);
       setSeconds(0);
-      setIntervalId(0);
+      setIntervalId(null);
     }
   }, [startRecord, intervalId]);
 

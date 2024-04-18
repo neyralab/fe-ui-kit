@@ -8,6 +8,8 @@ interface SidebarBlockProps {
   additionalText?: string;
   disabled?: boolean;
   onClick?: (e: MouseEvent<HTMLDivElement>) => void;
+  onIconClick?: (e: MouseEvent<HTMLDivElement>) => void;
+  onAdditionalTextClick?: (e: MouseEvent<HTMLDivElement>) => void;
   blockClass?: string;
   iconClass?: string;
   textClass?: string;
@@ -20,6 +22,8 @@ const SidebarBlock = ({
   additionalText,
   disabled,
   onClick,
+  onIconClick,
+  onAdditionalTextClick,
   blockClass,
   iconClass,
   textClass,
@@ -33,12 +37,19 @@ const SidebarBlock = ({
       className={CN(styles.sidebar, blockClass, disabled && styles.disabled)}
       onClick={handleClick}
     >
-      {icon && <span className={CN(styles.icon, iconClass)}>{icon}</span>}
+      {icon && (
+        <span className={CN(styles.icon, iconClass)} onClick={onIconClick}>
+          {icon}
+        </span>
+      )}
       {text && <span className={CN(styles.text, textClass)}>{text}</span>}
       {additionalText && (
-        <span className={CN(styles.additionalText, additionalTextClass)}>
+        <div
+          className={CN(styles.additionalText, additionalTextClass)}
+          onClick={onAdditionalTextClick}
+        >
           {additionalText}
-        </span>
+        </div>
       )}
     </div>
   );
