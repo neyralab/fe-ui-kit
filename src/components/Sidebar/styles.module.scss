@@ -1,0 +1,13 @@
+.sidebar {
+  display: block;
+  max-width: 346px;
+  width: 100%;
+  background-color: transparent;
+  padding: 25px 16px 72px 0px;
+  overflow-y: auto;
+  overflow-x: visible;
+}
+
+.hideSidebar {
+  display: none;
+}
