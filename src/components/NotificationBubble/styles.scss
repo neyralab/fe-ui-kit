@@ -1,0 +1,102 @@
+@import '../../styles/global-variables.scss';
+
+.notifications {
+  &-container {
+    position: fixed;
+    bottom: 100px;
+    left: 100px;
+    z-index: 10000;
+  }
+  &-menu-collapsed {
+    left: 175px;
+  }
+
+  &-item {
+    position: relative;
+    background: var(--tooltipContent, #242424);
+    padding: 12px 12px 12px 16px;
+    display: flex;
+    max-width: 430px;
+    flex-direction: row;
+    align-items: baseline;
+    box-shadow: var(--boxShadow);
+    &-merged {
+      left: -50px !important;
+      line-height: 19px !important;
+    }
+    &-message {
+      font-size: 14px;
+      line-height: 24px;
+      width: 100%;
+      color: var(--textColor, #fff);
+    }
+
+    &-icon {
+      position: absolute;
+      top: 0;
+      left: -50px;
+      width: 50px;
+      height: 100%;
+      background: $primary_color;
+      box-shadow: var(--boxShadow);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+
+      @each $name, $color in $notification-icon-colors {
+        &.#{$name} {
+          background-color: $color;
+        }
+      }
+    }
+
+    &-enter {
+      opacity: 0;
+    }
+
+    &-enter-active {
+      opacity: 1;
+      transition: opacity 500ms ease-in;
+    }
+
+    &-exit {
+      opacity: 1;
+    }
+
+    &-exit-active {
+      opacity: 0;
+      transition: opacity 500ms ease-out;
+    }
+  }
+
+  &-accept {
+    margin: 0 0 0 35px;
+  }
+
+  &-cancel {
+    margin: 0 0 0 45px;
+  }
+
+  &-close {
+    margin: 0 0 2px 29px;
+    cursor: pointer;
+
+    & > svg {
+      color: var(--iconColor, #fff);
+    }
+  }
+}
+
+@media screen and (max-width: 480px) {
+  .notifications {
+    &-menu-collapsed {
+      left: 150px;
+      width: 100vw;
+      bottom: -58px;
+    }
+
+    .close {
+      display: none;
+    }
+  }
+}

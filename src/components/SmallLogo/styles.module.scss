@@ -1,8 +1,16 @@
 .logo {
-  color: white;
+  color: var(--textColor);
   cursor: pointer;
   position: fixed;
   z-index: 100;
+
+  & svg path {
+    transition: fillOpacity 200ms ease-in-out;
+  }
+
+  &:hover svg path {
+    fill-opacity: 0.8;
+  }
 
   &:disabled:hover {
     border: none;

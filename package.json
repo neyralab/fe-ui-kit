@@ -11,16 +11,19 @@
     "classnames": "^2.5.1",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
+    "react-transition-group": "^4.4.5",
     "typescript": "^5.4.5"
   },
   "devDependencies": {
     "@types/node": "^20.12.7",
+    "@types/react-transition-group": "^4.4.10",
     "sass": "^1.75.0"
   },
   "main": "./src/index.ts",
   "exports": {
     ".": "./src/index.ts",
-    "./icons/border": "./src/icons/border/index.ts"
+    "./icons/border": "./src/icons/border/index.ts",
+    "./types": "./src/types/index.ts"
   },
   "prettier": {
     "trailingComma": "es5",

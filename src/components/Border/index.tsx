@@ -1,11 +1,11 @@
 import CN from 'classnames';
-import Notification, { NotificationProps } from '../Notification';
+import Notification, { BorderNotificationProps } from '../BorderNotification';
 import styles from './styles.module.scss';
 
 interface BorderProps {
   children: React.ReactNode;
   showCircles?: boolean;
-  notification?: NotificationProps;
+  notification?: BorderNotificationProps;
   containerClass?: string;
   contentClass?: string;
   footerClass?: string;

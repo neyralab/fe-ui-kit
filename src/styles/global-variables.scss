@@ -1,0 +1,138 @@
+/* Fonts */
+$main-fz: 14px;
+
+/* Colors */
+$primary_light: #ffffff;
+$primary_black: #000000;
+$secondary_light: #f2f4f8;
+$primary_dark: #202124;
+$secondary_dark: #242d34;
+$title_section: #1a1a1c;
+$primary_color: #0f73ef;
+$primary_color-light: #197fff;
+$primary_color-dark: #106de0;
+$secondary_color: #0f73ef;
+$twenty_color: #d3d3d3;
+$thirty_color: #abadb9;
+$forty_color: #ccceda;
+$fifty_color: #7c7e88;
+$light_grey: #58595f;
+$medium_grey: #7e8a9f;
+$dark_grey: #4b576c;
+$comment_grey: #92929d;
+$radio_unchecked: #cbcdd5;
+$shadow_grey: #dcdee9;
+$shadow_grey_light: #e5e7ec;
+$shadow_grey_dark: #d6dadc;
+$shadow_table: #eaedf4;
+$row_light_grey: #f6f8fc;
+$auth_background: #135cb6;
+$more_icon_color: #1c77eb;
+$active_color: #3ab36c;
+$active_light_color: #13e9e9;
+$inactive_color: #e02a39;
+$error: #b33a3a;
+$light_blue: #5da5ff;
+$dark_blue: #1a318b;
+$add_button: #f2f2f2;
+$orange: #f2a44c;
+$pink: #c085ec;
+$red: #ed1d2d;
+$rose: #fff6f7;
+$yellow: #faaa1e;
+$success: #54bb8e;
+$tag_grey: #979797;
+$tag_white: #ffffff;
+$tag_purple: #c085ec;
+$tag_orange: #f2a44c;
+$tag_red: #ed1d2d;
+$light_red: #f36c77;
+$color_purple: #c085ec;
+$color_orange: #f2a44c;
+$color_blue: #0f73ef;
+$color_green: #3ab36c;
+$color_red: #ed1d2d;
+$preview_container: #e9ebef;
+$view_overlay: #10161a;
+$active_comment: #f6f8fc;
+$tab_item: #878a8c;
+$edit_background: #f1f3f7;
+$empty_color: #7c7e88;
+$context_color: #f2f4f8;
+$context_border_color: #e4e7ee;
+$search_placeholder: #c1c9d9;
+$box_shadow: #2c343b;
+$selected_background: #e8f0fd;
+$divider_border: #efefef;
+$divider_border_dark: #f4f6f9;
+$action_grey: #333333;
+$breadcrumb_active: #202124;
+$text_grey: #4c516d;
+$done: #4caf84;
+$grey-5: #f3f4f7;
+$checkbox_gray: rgba(193, 201, 217, 0.5);
+$button-border: #d6e2f5;
+$skyblue: #beeeff;
+$darkblue: #1d3386;
+$sign_gradient_start: #00c6fb;
+$sign_gradient_center: #005bea;
+$sign_gradient_end: #495aff;
+$sign_error: #ffb800;
+
+$status_orange: #efa71b;
+$warning: #f2a928;
+
+$navigation_links: 'actions', 'comments', 'deleted', 'drive', 'recent', 'shared',
+  'profile', 'notifications', 'security', 'security-layers', 'documents', 'note',
+  'members', 'settings', 'upgrade', 'passwords';
+
+$action_options: 'cancel-invite', 'resend-invite', 'copy-link', 'remove-invite',
+  'block-user', 'unlock-user', 'clear-all', 'go-to-settings', 'edit';
+
+$notification-icon-colors: 'alert' $red $primary_light,
+  'warning' $warning $primary_light, 'success' $success $primary_light,
+  'file' $primary_color $primary_light;
+
+//Colors according to the new design
+$colWhite: #ffffff;
+$colBlack: #000000;
+$colBlackText: #10161a;
+
+$colError: #ed1d2d;
+$colWarning: #f2a928;
+$colSuccess: #54bb8e;
+$colInfo: #0f73ef;
+
+//Priority colors
+$colUrgent: #ed1d2d;
+$colHigh: #f2bf65;
+$colNormal: #7db3f4;
+$colLow: #c1c9d9;
+
+//Gray colors
+$colGrayDark: #4b576c;
+$colGrayMed: #7e8a9f;
+$colGrayLight: #c1c9d9;
+$colGrayBg: #f6f8fc;
+
+$colGrayRule: #f4f6f9;
+$colGrayRuleDark: #e9ebef;
+
+//Blue colors
+$colBlueBg: #e8f0fd;
+
+//Red colors
+$colRedBg: rgba(237, 29, 45, 0.1);
+
+//Yellow colors
+$colYellowBg: #f2a82830;
+
+//Green colors
+$colGreenBg: #54bb8e3a;
+
+// Gray bag
+$colGrayBg: #f5f5f5;
+
+$primaryGray: #777777;
+
+$mainBlack: #1a1a1a;

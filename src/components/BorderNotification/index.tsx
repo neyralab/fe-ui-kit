@@ -2,12 +2,12 @@ import { ReactNode } from 'react';
 import IconSuccess from '../../icons/icon-success';
 import styles from './styles.module.scss';
 
-export interface NotificationProps {
+export interface BorderNotificationProps {
   icon?: ReactNode;
   text: string;
 }
 
-const Notification = ({ icon, text }: NotificationProps) => {
+const BorderNotification = ({ icon, text }: BorderNotificationProps) => {
   return (
     <div className={styles.notification}>
       <div>{icon || <IconSuccess />}</div>
@@ -20,4 +20,4 @@ const Notification = ({ icon, text }: NotificationProps) => {
   );
 };
 
-export default Notification;
+export default BorderNotification;

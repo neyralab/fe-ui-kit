@@ -9,7 +9,8 @@ import SidebarBlock from './components/SidebarBlock';
 import ChatMessage from './components/ChatMessage';
 import ChatBlock from './components/ChatBlock';
 import SmallLogo from './components/SmallLogo';
-import Notification from './components/Notification';
+import NotificationBubble from './components/NotificationBubble';
+import BorderNotification from './components/BorderNotification';
 
 export {
   Border,
@@ -20,5 +21,6 @@ export {
   ChatMessage,
   ChatBlock,
   SmallLogo,
-  Notification,
+  NotificationBubble,
+  BorderNotification,
 };
