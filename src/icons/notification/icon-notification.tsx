@@ -2,7 +2,7 @@ interface IconNotificationProps {
   color?: string;
 }
 
-const IconNotification = ({ color }: IconNotificationProps) => (
+const IconNotification = ({ color = '#FFFFFF' }: IconNotificationProps) => (
   <svg
     width="18"
     height="24"
@@ -20,9 +20,5 @@ const IconNotification = ({ color }: IconNotificationProps) => (
     />
   </svg>
 );
-
-IconNotification.defaultProps = {
-  color: '#FFFFFF',
-};
 
 export default IconNotification;

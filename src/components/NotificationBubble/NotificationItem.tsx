@@ -106,9 +106,4 @@ const NotificationItem = ({
   );
 };
 
-NotificationItem.defaultProps = {
-  notification: {},
-  removeItem: () => {},
-};
-
 export default NotificationItem;

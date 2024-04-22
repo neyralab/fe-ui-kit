@@ -2,7 +2,7 @@ interface IconWarningProps {
   color?: string;
 }
 
-const IconWarning = ({ color }: IconWarningProps) => (
+const IconWarning = ({ color = '#FFFFFF' }: IconWarningProps) => (
   <svg
     width="32"
     height="32"
@@ -18,9 +18,5 @@ const IconWarning = ({ color }: IconWarningProps) => (
     </g>
   </svg>
 );
-
-IconWarning.defaultProps = {
-  color: '#FFFFFF',
-};
 
 export default IconWarning;

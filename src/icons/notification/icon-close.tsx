@@ -10,8 +10,8 @@ const IconClose = () => {
       <path
         d="M13 1L1 13M12.9896 12.9896L1.01036 1.01039"
         stroke="currentColor"
-        stroke-width="1.2"
-        stroke-linecap="round"
+        strokeWidth="1.2"
+        strokeLinecap="round"
       />
     </svg>
   );

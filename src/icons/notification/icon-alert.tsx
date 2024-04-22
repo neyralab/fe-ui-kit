@@ -2,7 +2,7 @@ interface IconAlertProps {
   color?: string;
 }
 
-const IconAlert = ({ color }: IconAlertProps) => (
+const IconAlert = ({ color = '#FFFFFF' }: IconAlertProps) => (
   <svg
     width="24"
     height="24"
@@ -25,9 +25,5 @@ const IconAlert = ({ color }: IconAlertProps) => (
     />
   </svg>
 );
-
-IconAlert.defaultProps = {
-  color: '#FFFFFF',
-};
 
 export default IconAlert;

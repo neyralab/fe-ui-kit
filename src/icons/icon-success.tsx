@@ -2,7 +2,7 @@ interface IconSuccessProps {
   color?: string;
 }
 
-const IconSuccess = ({ color }: IconSuccessProps) => (
+const IconSuccess = ({ color = '#FFFFFF' }: IconSuccessProps) => (
   <svg
     width="24"
     height="24"
@@ -27,9 +27,5 @@ const IconSuccess = ({ color }: IconSuccessProps) => (
     />
   </svg>
 );
-
-IconSuccess.defaultProps = {
-  color: '#FFFFFF',
-};
 
 export default IconSuccess;
