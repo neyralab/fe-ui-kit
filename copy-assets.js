@@ -21,14 +21,16 @@ const sourceGatewayPath = path.resolve(
   'dist',
   'bundle.umd.js'
 );
-const sourceServiceWorkerPath = path.resolve(
-  projectRoot,
-  'node_modules',
-  'fe-ui-kit',
-  'src',
-  'workers',
-  'service-worker.js'
-);
+const sourceServiceWorkerPath = projectRoot.includes('node_modules')
+  ? path.resolve(
+      projectRoot,
+      'node_modules',
+      'fe-ui-kit',
+      'src',
+      'workers',
+      'service-worker.js'
+    )
+  : path.resolve(projectRoot, 'src', 'workers', 'service-worker.js');
 
 const destPublicPath = path.resolve(projectRoot, 'public');
 
