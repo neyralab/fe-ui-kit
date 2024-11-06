@@ -46,7 +46,7 @@ const VideoPlayer = ({
   useEffect(() => {
     if ('serviceWorker' in navigator) {
       navigator.serviceWorker
-        .register('/service-worker.js')
+        .register('service-worker.js')
         .then((registration) => {
           if (registration.active) {
             setServiceWorkerReady(true);

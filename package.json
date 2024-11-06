@@ -1,7 +1,9 @@
 {
   "name": "fe-ui-kit",
   "version": "1.0.0",
-  "scripts": {},
+  "scripts": {
+    "postinstall": "node copy-assets.js"
+  },
   "author": "",
   "license": "ISC",
   "description": "",

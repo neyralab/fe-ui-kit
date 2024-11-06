@@ -1,5 +1,7 @@
-importScripts('/index.min.js');
-importScripts('/bundle.umd.js');
+const basePath = self.location.pathname.replace(/\/service-worker\.js$/, '');
+
+importScripts(`${basePath}/index.min.js`);
+importScripts(`${basePath}/bundle.umd.js`);
 
 // Cache keys
 const CACHE_KEYS = {
