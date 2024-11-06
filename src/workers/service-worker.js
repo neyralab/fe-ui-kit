@@ -83,9 +83,7 @@ async function getApiUrl() {
 }
 
 self.addEventListener('fetch', function (event) {
-  const url = new URL(event.request.url);
-
-  if (url.pathname === '/non-existent-url/video.mp4') {
+  if (event.request.url.includes('non-existent-url/video.mp4')) {
     event.respondWith(handleVideo(event));
   } else {
     event.respondWith(fetch(event.request));
