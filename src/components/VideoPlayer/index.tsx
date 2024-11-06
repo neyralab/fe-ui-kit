@@ -112,7 +112,9 @@ const VideoPlayer = ({
   }, [slug, decryptionKey, serviceWorkerReady]);
 
   useEffect(() => {
-    onError?.(error);
+    if (error) {
+      onError?.(error);
+    }
   }, [error]);
 
   const handleLoadedData = () => {
@@ -137,6 +139,9 @@ const VideoPlayer = ({
   };
 
   const handleError = async () => {
+    if (!videoUrl) {
+      return;
+    }
     setError('An unexpected error occurred while playing the video.');
   };
 
