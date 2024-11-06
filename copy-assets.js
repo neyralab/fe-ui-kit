@@ -1,7 +1,10 @@
 const fs = require('fs');
 const path = require('path');
 
-const projectRoot = process.cwd();
+let projectRoot = process.cwd();
+if (projectRoot.includes('node_modules')) {
+  projectRoot = path.resolve(projectRoot, '../../');
+}
 console.log('projectRoot', projectRoot);
 
 const sourceIpldPath = path.resolve(
