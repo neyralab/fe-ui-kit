@@ -13,6 +13,8 @@ interface VideoPlayerProps {
   onPause?: () => void;
   onEnd?: () => void;
   onError?: (error: string) => void;
+  onReadyToPlay?: () => void;
+  className?: string;
 }
 
 const generateVideoUrl = (slug: string, decryptionKey?: string): string => {
@@ -37,6 +39,8 @@ const VideoPlayer = ({
   onPause,
   onEnd,
   onError,
+  onReadyToPlay,
+  className = '',
 }: VideoPlayerProps) => {
   const videoRef = useRef<HTMLVideoElement | null>(null);
   const [error, setError] = useState<string>('');
@@ -117,6 +121,7 @@ const VideoPlayer = ({
         console.error(error);
       });
     }
+    onReadyToPlay?.();
   };
 
   const handlePlay = () => {
@@ -136,7 +141,7 @@ const VideoPlayer = ({
   };
 
   return (
-    <div className={styles.videoContainer}>
+    <div className={`${styles.videoContainer} ${className}`}>
       {error ? (
         <div className={styles.errorMessage}>{error}</div>
       ) : (
