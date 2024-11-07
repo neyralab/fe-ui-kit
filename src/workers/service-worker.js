@@ -23,6 +23,8 @@ const DECRYPTION_KEY_ERROR_MESSAGE =
 const DEFAULT_ERROR_MESSAGE =
   'An unexpected error occurred while playing the video.';
 
+const VIDEO_URL = 'non-existent-url/video.mp4';
+
 self.addEventListener('install', () => {
   console.log('Service Worker installing...');
   self.skipWaiting();
@@ -83,7 +85,7 @@ async function getApiUrl() {
 }
 
 self.addEventListener('fetch', function (event) {
-  if (event.request.url.includes('non-existent-url/video.mp4')) {
+  if (event.request.url.includes(VIDEO_URL)) {
     event.respondWith(handleVideo(event));
   } else {
     event.respondWith(fetch(event.request));
