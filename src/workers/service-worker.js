@@ -139,13 +139,20 @@ async function handleVideo(event) {
 
     const { gateway } = tokenResponse;
 
-    const { start, end, chunkIndex, contentLength, fileEnd, fileStart, level } =
-      calculateRange({
-        range,
-        fileSize,
-        isOnStorageProvider,
-        gateway,
-      });
+    const {
+      start,
+      end,
+      chunksIndex,
+      contentLength,
+      fileEnd,
+      fileStart,
+      level,
+    } = calculateRange({
+      range,
+      fileSize,
+      isOnStorageProvider,
+      gateway,
+    });
 
     const headers = {
       'Content-Range': `bytes ${start}-${end}/${fileSize}`,
@@ -154,41 +161,54 @@ async function handleVideo(event) {
       'Content-Type': file.mime,
     };
 
-    const filePath = `${slug}-${chunkIndex}.mp4`;
+    let combinedChunks = [];
+    for (const chunkIndex of chunksIndex) {
+      const filePath = `${slug}-${chunkIndex}.mp4`;
 
-    if (!(await caches.match(filePath))) {
-      const readable = isOnStorageProvider
-        ? await downloadFromStorageProvider({
-            file,
-            gateway,
-            chunkIndex,
-            level,
-            key,
-          })
-        : await downloadFromBackend({ file, key, tokenResponse, chunkIndex });
+      if (!(await caches.match(filePath))) {
+        const readable = isOnStorageProvider
+          ? await downloadFromStorageProvider({
+              file,
+              gateway,
+              chunkIndex,
+              level,
+              key,
+            })
+          : await downloadFromBackend({ file, key, tokenResponse, chunkIndex });
 
-      if (readable?.failed || !readable) {
-        return createErrorResponse(
-          readable?.message ?? DEFAULT_ERROR_MESSAGE,
-          400
-        );
+        if (readable?.failed || !readable) {
+          return createErrorResponse(
+            readable?.message ?? DEFAULT_ERROR_MESSAGE,
+            400
+          );
+        }
+
+        await caches.open(CACHE_KEYS.VIDEO).then((cache) => {
+          const response = new Response(readable, {
+            headers: { Date: new Date().toUTCString() },
+          });
+          return cache.put(filePath, response);
+        });
       }
 
-      await caches.open(CACHE_KEYS.VIDEO).then((cache) => {
-        const response = new Response(readable, {
-          headers: { Date: new Date().toUTCString() },
-        });
-        return cache.put(filePath, response);
-      });
+      const cache = await caches.open(CACHE_KEYS.VIDEO);
+      const cachedResponse = await cache.match(filePath);
+      const chunk = await cachedResponse.arrayBuffer();
+      combinedChunks.push(chunk);
     }
+    let totalLength = combinedChunks.reduce(
+      (sum, chunk) => sum + chunk.byteLength,
+      0
+    );
+    const finalBuffer = new ArrayBuffer(totalLength);
+    let offset = 0;
+    for (const chunk of combinedChunks) {
+      new Uint8Array(finalBuffer).set(new Uint8Array(chunk), offset);
+      offset += chunk.byteLength;
+    }
+    const slicedBuffer = finalBuffer.slice(fileStart, fileEnd + 1);
 
-    const cache = await caches.open(CACHE_KEYS.VIDEO);
-    const cachedResponse = await cache.match(filePath);
-    const chunk = await cachedResponse
-      .arrayBuffer()
-      .then((buffer) => buffer.slice(fileStart, fileEnd + 1));
-
-    return new Response(chunk, { status: 206, headers });
+    return new Response(slicedBuffer, { status: 206, headers });
   } catch (error) {
     return createErrorResponse(DEFAULT_ERROR_MESSAGE, 500);
   }
@@ -396,20 +416,56 @@ function calculateRange({ range, fileSize, isOnStorageProvider, gateway }) {
     ? chunkSizeByLevel[level]
     : upload_chunk_size;
 
-  const chunkIndex =
-    requestedStart === 0 ? 0 : Math.floor(requestedStart / chunkSize);
+  const chunksIndex = getChunksForRange({
+    requestedStart,
+    requestedEnd,
+    chunkSize,
+    hasRangeEnd: rangeParts[1],
+  });
 
   const start = requestedStart;
+
   const end = Math.min(
-    start + chunkSize - 1,
+    chunksIndex.at(-1) * chunkSize + chunkSize - 1,
     fileSize - 1,
-    requestedEnd,
-    chunkSize * (chunkIndex + 1) - 1
+    requestedEnd
   );
+
   const contentLength = end - start + 1;
 
   const fileStart = Math.max(0, start % chunkSize);
   const fileEnd = Math.min(chunkSize, end % chunkSize);
 
-  return { start, end, contentLength, chunkIndex, fileStart, fileEnd, level };
+  return {
+    start,
+    end,
+    contentLength,
+    chunksIndex,
+    fileStart,
+    fileEnd,
+    level,
+  };
+}
+
+function getChunksForRange({
+  requestedStart,
+  requestedEnd,
+  hasRangeEnd,
+  chunkSize,
+}) {
+  const chunkStartIndex =
+    requestedStart === 0 ? 0 : Math.floor(requestedStart / chunkSize);
+
+  if (!hasRangeEnd) {
+    return [chunkStartIndex];
+  }
+
+  const chunkEndIndex = Math.floor(requestedEnd / chunkSize);
+
+  const chunkIndices = [];
+  for (let i = chunkStartIndex; i <= chunkEndIndex; i++) {
+    chunkIndices.push(i);
+  }
+
+  return chunkIndices;
 }
