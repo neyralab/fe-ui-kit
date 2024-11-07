@@ -1,26 +1,14 @@
 import './styles/dark-theme.css';
 import './styles/light-theme.css';
 
-import Border from './components/Border';
-import Button from './components/Button';
-import Input from './components/Input';
-import Sidebar from './components/Sidebar';
-import SidebarBlock from './components/SidebarBlock';
-import ChatMessage from './components/ChatMessage';
-import ChatBlock from './components/ChatBlock';
-import SmallLogo from './components/SmallLogo';
-import NotificationBubble from './components/NotificationBubble';
-import BorderNotification from './components/BorderNotification';
-
-export {
-  Border,
-  Button,
-  Input,
-  Sidebar,
-  SidebarBlock,
-  ChatMessage,
-  ChatBlock,
-  SmallLogo,
-  NotificationBubble,
-  BorderNotification,
-};
+export { default as Border } from './components/Border';
+export { default as Button } from './components/Button';
+export { default as Input } from './components/Input';
+export { default as Sidebar } from './components/Sidebar';
+export { default as SidebarBlock } from './components/SidebarBlock';
+export { default as ChatMessage } from './components/ChatMessage';
+export { default as ChatBlock } from './components/ChatBlock';
+export { default as SmallLogo } from './components/SmallLogo';
+export { default as NotificationBubble } from './components/NotificationBubble';
+export { default as BorderNotification } from './components/BorderNotification';
+export { default as VideoPlayer } from './components/VideoPlayer';
