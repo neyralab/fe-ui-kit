@@ -161,54 +161,60 @@ async function handleVideo(event) {
       'Content-Type': file.mime,
     };
 
-    let combinedChunks = [];
-    for (const chunkIndex of chunksIndex) {
-      const filePath = `${slug}-${chunkIndex}.mp4`;
+    const readableStream = new ReadableStream({
+      start(controller) {
+        (async () => {
+          try {
+            for (const chunkIndex of chunksIndex) {
+              const filePath = `${slug}-${chunkIndex}.mp4`;
 
-      if (!(await caches.match(filePath))) {
-        const readable = isOnStorageProvider
-          ? await downloadFromStorageProvider({
-              file,
-              gateway,
-              chunkIndex,
-              level,
-              key,
-            })
-          : await downloadFromBackend({ file, key, tokenResponse, chunkIndex });
+              if (!(await caches.match(filePath))) {
+                const readable = isOnStorageProvider
+                  ? await downloadFromStorageProvider({
+                      file,
+                      gateway,
+                      chunkIndex,
+                      level,
+                      key,
+                    })
+                  : await downloadFromBackend({
+                      file,
+                      key,
+                      tokenResponse,
+                      chunkIndex,
+                    });
 
-        if (readable?.failed || !readable) {
-          return createErrorResponse(
-            readable?.message ?? DEFAULT_ERROR_MESSAGE,
-            400
-          );
-        }
+                if (readable?.failed || !readable) {
+                  return controller.error(
+                    new Error(readable?.message ?? DEFAULT_ERROR_MESSAGE)
+                  );
+                }
 
-        await caches.open(CACHE_KEYS.VIDEO).then((cache) => {
-          const response = new Response(readable, {
-            headers: { Date: new Date().toUTCString() },
-          });
-          return cache.put(filePath, response);
-        });
-      }
+                await caches.open(CACHE_KEYS.VIDEO).then((cache) => {
+                  const response = new Response(readable, {
+                    headers: { Date: new Date().toUTCString() },
+                  });
+                  return cache.put(filePath, response);
+                });
+              }
 
-      const cache = await caches.open(CACHE_KEYS.VIDEO);
-      const cachedResponse = await cache.match(filePath);
-      const chunk = await cachedResponse.arrayBuffer();
-      combinedChunks.push(chunk);
-    }
-    let totalLength = combinedChunks.reduce(
-      (sum, chunk) => sum + chunk.byteLength,
-      0
-    );
-    const finalBuffer = new ArrayBuffer(totalLength);
-    let offset = 0;
-    for (const chunk of combinedChunks) {
-      new Uint8Array(finalBuffer).set(new Uint8Array(chunk), offset);
-      offset += chunk.byteLength;
-    }
-    const slicedBuffer = finalBuffer.slice(fileStart, fileEnd + 1);
+              const cache = await caches.open(CACHE_KEYS.VIDEO);
+              const cachedResponse = await cache.match(filePath);
+              const chunk = await cachedResponse.arrayBuffer();
+              const uint8Array = new Uint8Array(
+                chunk.slice(fileStart, fileEnd + 1)
+              );
+              controller.enqueue(uint8Array);
+            }
+            controller.close();
+          } catch (error) {
+            controller.error(new Error(DEFAULT_ERROR_MESSAGE));
+          }
+        })();
+      },
+    });
 
-    return new Response(slicedBuffer, { status: 206, headers });
+    return new Response(readableStream, { status: 206, headers });
   } catch (error) {
     return createErrorResponse(DEFAULT_ERROR_MESSAGE, 500);
   }
