@@ -434,7 +434,8 @@ function calculateRange({ range, fileSize, isOnStorageProvider, gateway }) {
   const contentLength = end - start + 1;
 
   const fileStart = Math.max(0, start % chunkSize);
-  const fileEnd = Math.min(chunkSize, end % chunkSize);
+  const totalSize = chunksIndex.length * chunkSize;
+  const fileEnd = Math.min(totalSize, end % totalSize);
 
   return {
     start,
