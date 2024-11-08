@@ -152,6 +152,7 @@ async function handleVideo(event) {
       fileSize,
       isOnStorageProvider,
       gateway,
+      isEncrypted,
     });
 
     const headers = {
@@ -418,7 +419,13 @@ async function downloadFromBackend({ file, key, tokenResponse, chunkIndex }) {
   return chunk;
 }
 
-function calculateRange({ range, fileSize, isOnStorageProvider, gateway }) {
+function calculateRange({
+  range,
+  fileSize,
+  isOnStorageProvider,
+  gateway,
+  isEncrypted,
+}) {
   const { interim_chunk_size, upload_chunk_size } = gateway;
   const chunkSizeByLevel = {
     interim: interim_chunk_size,
@@ -427,9 +434,13 @@ function calculateRange({ range, fileSize, isOnStorageProvider, gateway }) {
 
   const rangeParts = range.replace(/bytes=/, '').split('-');
   const requestedStart = Number(rangeParts[0]);
-  const requestedEnd = rangeParts[1] ? Number(rangeParts[1]) : fileSize;
+  const endPart = rangeParts[1];
+  const requestedEnd = endPart ? Number(endPart) : fileSize;
   const requestedBytes = requestedEnd - requestedStart;
-  const level = requestedBytes > upload_chunk_size ? 'interim' : 'upload';
+  const isInterim =
+    isEncrypted || (endPart && requestedBytes > upload_chunk_size);
+  const level = isInterim ? 'interim' : 'upload';
+
   const chunkSize = isOnStorageProvider
     ? chunkSizeByLevel[level]
     : upload_chunk_size;
@@ -438,7 +449,7 @@ function calculateRange({ range, fileSize, isOnStorageProvider, gateway }) {
     requestedStart,
     requestedEnd,
     chunkSize,
-    hasRangeEnd: rangeParts[1],
+    hasRangeEnd: endPart,
   });
 
   const start = requestedStart;
