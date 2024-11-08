@@ -337,6 +337,18 @@ async function createErrorResponse(message, statusCode) {
   return response;
 }
 
+function getCIDs(cid, level) {
+  if (level === 'interim') {
+    return cid.nodes.map((node) => node.cid);
+  } else if (level === 'upload') {
+    return cid.nodes.flatMap((node) =>
+      node.nodes ? node.nodes.map((subNode) => subNode.cid) : node.cid
+    );
+  } else {
+    throw new Error('Unknown level: ' + level);
+  }
+}
+
 async function downloadFromStorageProvider({
   file,
   gateway,
@@ -344,7 +356,7 @@ async function downloadFromStorageProvider({
   key,
   level,
 }) {
-  const cids = file.cid.nodes.map((node) => node.cid);
+  const cids = getCIDs(file.cid, level);
   const cid = cids[chunkIndex];
 
   return await self['client-gateway'].downloadFileFromSP({
