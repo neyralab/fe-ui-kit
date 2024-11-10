@@ -43,13 +43,28 @@ self.addEventListener('message', (event) => {
       const response = new Response(apiUrl, {
         headers: { Date: new Date().toUTCString() },
       });
-      cache.put('api-url', response);
+
+      cache
+        .put('api-url', response)
+        .then(() => {
+          event.source.postMessage({ type: 'API_URL_SAVED' });
+        })
+        .catch((error) => {
+          event.source.postMessage({
+            type: 'API_URL_SAVE_FAILED',
+            message: error.message,
+          });
+        });
     });
   }
 
   if (event.data && event.data.type === 'DELETE_EXPIRED_CACHE') {
     console.log('Cleaning expired caches...');
-    event.waitUntil(deleteExpiredCacheEntries());
+    event.waitUntil(
+      deleteExpiredCacheEntries().then(() => {
+        event.source.postMessage({ type: 'CACHE_CLEARED' });
+      })
+    );
   }
 });
 

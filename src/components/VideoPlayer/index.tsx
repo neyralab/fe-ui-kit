@@ -27,6 +27,15 @@ const generateVideoUrl = (slug: string, decryptionKey?: string): string => {
   return `${baseUrl}?${queryParams.toString()}`;
 };
 
+let cacheCleared = false;
+
+enum MessageType {
+  VIDEO_ERROR = 'VIDEO_ERROR',
+  API_URL_SAVED = 'API_URL_SAVED',
+  API_URL_SAVE_FAILED = 'API_URL_SAVE_FAILED',
+  CACHE_CLEARED = 'CACHE_CLEARED',
+}
+
 const VideoPlayer = ({
   slug,
   decryptionKey,
@@ -46,6 +55,7 @@ const VideoPlayer = ({
   const [error, setError] = useState<string>('');
   const [serviceWorkerReady, setServiceWorkerReady] = useState(false);
   const [videoUrl, setVideoUrl] = useState<string>('');
+  const [apiUrlSaved, setApiUrlSaved] = useState(false);
 
   useEffect(() => {
     if ('serviceWorker' in navigator) {
@@ -71,18 +81,39 @@ const VideoPlayer = ({
           console.error('Service Worker registration failed:', error);
           setError('Service Worker registration failed');
         });
+
+      const handleMessage = (event: MessageEvent) => {
+        const { data } = event;
+        if (data) {
+          switch (data.type) {
+            case MessageType.VIDEO_ERROR:
+              setError(data.message);
+              break;
+            case MessageType.API_URL_SAVED:
+              setApiUrlSaved(true);
+              break;
+            case MessageType.API_URL_SAVE_FAILED:
+              console.log('Failed to save API URL:', data.message);
+              setError('An unexpected error occurred while playing the video.');
+              break;
+            case MessageType.CACHE_CLEARED:
+              cacheCleared = true;
+              console.log('Cache has been cleared.');
+              break;
+            default:
+              break;
+          }
+        }
+      };
+
+      navigator.serviceWorker.addEventListener('message', handleMessage);
+
+      return () => {
+        navigator.serviceWorker.removeEventListener('message', handleMessage);
+      };
+    } else {
+      setError('Service Workers are not supported in this browser.');
     }
-    const handleMessage = (event: MessageEvent) => {
-      if (event.data && event.data.type === 'VIDEO_ERROR') {
-        setError(event.data.message);
-      }
-    };
-
-    navigator.serviceWorker.addEventListener('message', handleMessage);
-
-    return () => {
-      navigator.serviceWorker.removeEventListener('message', handleMessage);
-    };
   }, []);
 
   useEffect(() => {
@@ -92,15 +123,16 @@ const VideoPlayer = ({
         return;
       }
 
-      navigator.serviceWorker.controller?.postMessage({
-        type: 'DELETE_EXPIRED_CACHE',
-      });
+      !cacheCleared &&
+        navigator.serviceWorker.controller?.postMessage({
+          type: 'DELETE_EXPIRED_CACHE',
+        });
       navigator.serviceWorker.controller?.postMessage({ apiUrl });
     }
   }, [apiUrl, serviceWorkerReady]);
 
   useEffect(() => {
-    if (serviceWorkerReady) {
+    if (serviceWorkerReady && apiUrlSaved) {
       if (!slug) {
         setError('Slug are required.');
         return;
@@ -109,7 +141,7 @@ const VideoPlayer = ({
       setVideoUrl(newVideoUrl);
       setError('');
     }
-  }, [slug, decryptionKey, serviceWorkerReady]);
+  }, [slug, decryptionKey, serviceWorkerReady, apiUrlSaved]);
 
   useEffect(() => {
     if (error) {
