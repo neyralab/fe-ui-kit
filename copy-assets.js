@@ -2,7 +2,9 @@ const fs = require('fs');
 const path = require('path');
 
 let projectRoot = process.cwd();
-if (projectRoot.includes('node_modules')) {
+
+const isInNodeModules = projectRoot.includes('node_modules');
+if (isInNodeModules) {
   projectRoot = path.resolve(projectRoot, '../../');
 }
 
@@ -14,47 +16,62 @@ const sourceIpldPath = path.resolve(
   'dist',
   'index.min.js'
 );
-const sourceGatewayPath = path.resolve(
+
+// Check both possible paths for gdgateway-client
+let sourceGatewayPath = path.resolve(
   projectRoot,
   'node_modules',
   'gdgateway-client',
   'dist',
   'bundle.umd.js'
 );
-const sourceServiceWorkerPath = projectRoot.includes('node_modules')
-  ? path.resolve(
-      projectRoot,
-      'node_modules',
-      'fe-ui-kit',
-      'src',
-      'workers',
-      'service-worker.js'
-    )
-  : path.resolve(projectRoot, 'src', 'workers', 'service-worker.js');
+
+if (!fs.existsSync(sourceGatewayPath)) {
+  // If not in root node_modules, check fe-ui-kit's node_modules
+  sourceGatewayPath = path.resolve(
+    process.cwd(),
+    'node_modules',
+    'gdgateway-client',
+    'dist',
+    'bundle.umd.js'
+  );
+}
+
+const sourceServiceWorkerPath = path.resolve(
+  process.cwd(),
+  'src',
+  'workers',
+  'service-worker.js'
+);
 
 const destPublicPath = path.resolve(projectRoot, 'public');
 
 if (!fs.existsSync(destPublicPath)) {
-  fs.mkdirSync(destPublicPath);
+  fs.mkdirSync(destPublicPath, { recursive: true });
 }
 
 try {
+  if (!fs.existsSync(sourceIpldPath)) {
+    throw new Error(`Required file missing: ${sourceIpldPath}`);
+  }
   fs.copyFileSync(sourceIpldPath, path.join(destPublicPath, 'index.min.js'));
-  console.log(`Copied ${sourceIpldPath} to ${destPublicPath}/index.min.js`);
 
+  if (!fs.existsSync(sourceGatewayPath)) {
+    throw new Error(`Required file missing: ${sourceGatewayPath}`);
+  }
   fs.copyFileSync(
     sourceGatewayPath,
     path.join(destPublicPath, 'bundle.umd.js')
   );
-  console.log(`Copied ${sourceGatewayPath} to ${destPublicPath}/bundle.umd.js`);
 
+  if (!fs.existsSync(sourceServiceWorkerPath)) {
+    throw new Error(`Required file missing: ${sourceServiceWorkerPath}`);
+  }
   fs.copyFileSync(
     sourceServiceWorkerPath,
     path.join(destPublicPath, 'service-worker.js')
   );
-  console.log(
-    `Copied ${sourceServiceWorkerPath} to ${destPublicPath}/service-worker.js`
-  );
 } catch (err) {
-  console.error('Error copying files:', err);
+  console.error('Error during postinstall:', err.message);
+  process.exit(1);
 }
