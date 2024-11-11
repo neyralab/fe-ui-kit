@@ -10,14 +10,13 @@
   "license": "ISC",
   "description": "",
   "dependencies": {
-    "@ipld/car": "^5.3.3",
     "@types/react": "^18.2.79",
     "@types/react-dom": "^18.2.25",
     "classnames": "^2.5.1",
+    "gdgateway-client": "github:neyralab/client-gateway#1.6.1",
     "react-transition-group": "^4.4.5",
     "rimraf": "^5.0.10",
-    "typescript": "^5.4.5",
-    "gdgateway-client": "github:neyralab/client-gateway#1.6.1"
+    "typescript": "^5.4.5"
   },
   "devDependencies": {
     "@chromatic-com/storybook": "^3.2.2",
