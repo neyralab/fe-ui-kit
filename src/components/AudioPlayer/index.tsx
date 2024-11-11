@@ -147,6 +147,9 @@ const AudioPlayer = ({
   }, [error]);
 
   const handleError = () => {
+    if (!audioUrl) {
+      return;
+    }
     setError('An unexpected error occurred while playing the audio.');
   };
 

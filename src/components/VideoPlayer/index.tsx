@@ -1,21 +1,31 @@
-import { useEffect, useRef, useState } from 'react';
-import styles from './styles.module.scss';
+import { useEffect, useState } from 'react';
+import ReactPlayer, { ReactPlayerProps } from 'react-player';
 import { MessageType } from '../../types/MessageType';
+import { OnProgressProps } from 'react-player/base';
 
 interface VideoPlayerProps {
   slug: string;
   decryptionKey?: string;
   apiUrl: string;
-  autoplay?: boolean;
+
+  playing?: boolean;
   loop?: boolean;
   muted?: boolean;
   controls?: boolean;
+  playsinline?: boolean;
+  width?: string | number;
+  height?: string | number;
+  videoRef?: React.Ref<ReactPlayer>;
+
   onPlay?: () => void;
   onPause?: () => void;
-  onEnd?: () => void;
+  onEnded?: () => void;
   onError?: (error: string) => void;
-  onReadyToPlay?: () => void;
+  onReady?: (player: ReactPlayer) => void;
+  onProgress?: (state: OnProgressProps) => void;
+
   className?: string;
+  playerProps?: ReactPlayerProps;
 }
 
 const generateVideoUrl = (slug: string, decryptionKey?: string): string => {
@@ -34,18 +44,23 @@ const VideoPlayer = ({
   slug,
   decryptionKey,
   apiUrl,
-  autoplay = true,
+  playing = true,
   loop = false,
   muted = false,
   controls = true,
+  playsinline = true,
+  width = '100%',
+  height = '100%',
   onPlay,
   onPause,
-  onEnd,
+  onEnded,
   onError,
-  onReadyToPlay,
+  onReady,
+  onProgress,
   className = '',
+  videoRef,
+  playerProps = {},
 }: VideoPlayerProps) => {
-  const videoRef = useRef<HTMLVideoElement | null>(null);
   const [error, setError] = useState<string>('');
   const [serviceWorkerReady, setServiceWorkerReady] = useState(false);
   const [videoUrl, setVideoUrl] = useState<string>('');
@@ -128,7 +143,7 @@ const VideoPlayer = ({
   useEffect(() => {
     if (serviceWorkerReady && apiUrlSaved) {
       if (!slug) {
-        setError('Slug are required.');
+        setError('Slug is required.');
         return;
       }
       const newVideoUrl = generateVideoUrl(slug, decryptionKey);
@@ -143,28 +158,7 @@ const VideoPlayer = ({
     }
   }, [error]);
 
-  const handleLoadedData = () => {
-    if (autoplay && videoRef.current) {
-      videoRef.current.play().catch((error) => {
-        console.error(error);
-      });
-    }
-    onReadyToPlay?.();
-  };
-
-  const handlePlay = () => {
-    onPlay?.();
-  };
-
-  const handlePause = () => {
-    onPause?.();
-  };
-
-  const handleEnd = () => {
-    onEnd?.();
-  };
-
-  const handleError = async () => {
+  const handleError = () => {
     if (!videoUrl) {
       return;
     }
@@ -172,27 +166,25 @@ const VideoPlayer = ({
   };
 
   return (
-    <div className={`${styles.videoContainer} ${className}`}>
-      {error ? (
-        <div className={styles.errorMessage}>{error}</div>
-      ) : (
-        <video
-          ref={videoRef}
-          src={videoUrl}
-          loop={loop}
-          controls={controls}
-          muted={muted}
-          onPlay={handlePlay}
-          onPause={handlePause}
-          onEnded={handleEnd}
-          onError={handleError}
-          onLoadedData={handleLoadedData}
-          className={styles.video}
-        >
-          <p>Your browser does not support the video tag.</p>
-        </video>
-      )}
-    </div>
+    <ReactPlayer
+      ref={videoRef}
+      url={videoUrl}
+      playing={playing}
+      loop={loop}
+      muted={muted}
+      controls={controls}
+      playsinline={playsinline}
+      width={width}
+      height={height}
+      onPlay={onPlay}
+      onPause={onPause}
+      onEnded={onEnded}
+      onError={handleError}
+      onReady={onReady}
+      onProgress={onProgress}
+      className={className}
+      {...playerProps}
+    />
   );
 };
 

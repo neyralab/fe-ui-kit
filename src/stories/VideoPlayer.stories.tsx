@@ -21,11 +21,54 @@ const meta: Meta<typeof VideoPlayer> = {
     ),
   ],
   argTypes: {
-    onPlay: { action: 'played' },
-    onPause: { action: 'paused' },
+    playing: {
+      control: { type: 'boolean' },
+      defaultValue: true,
+      description: 'Automatically start playing the video',
+    },
+    loop: {
+      control: { type: 'boolean' },
+      defaultValue: false,
+      description: 'Loop the video playback',
+    },
+    muted: {
+      control: { type: 'boolean' },
+      defaultValue: false,
+      description: 'Mute the video playback',
+    },
+    controls: {
+      control: { type: 'boolean' },
+      defaultValue: true,
+      description: 'Show playback controls',
+    },
+    playsinline: {
+      control: { type: 'boolean' },
+      defaultValue: true,
+      description: 'Play video inline on mobile devices',
+    },
+    width: {
+      control: { type: 'text' },
+      defaultValue: '100%',
+      description: 'Width of the video player',
+    },
+    height: {
+      control: { type: 'text' },
+      defaultValue: '100%',
+      description: 'Height of the video player',
+    },
+    onPlay: {
+      action: 'played',
+    },
+    onPause: {
+      action: 'paused',
+    },
     onEnd: { action: 'ended' },
-    onError: { action: 'error' },
-    onReadyToPlay: { action: 'ready to play' },
+    onError: {
+      action: 'error',
+    },
+    onReadyToPlay: {
+      action: 'ready to play',
+    },
   },
 };
 
