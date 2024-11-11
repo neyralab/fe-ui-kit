@@ -50,7 +50,7 @@ if (!fs.existsSync(destPublicPath)) {
 const checkAndCopyFileWithRetries = (
   filePaths,
   destPath,
-  retries = 5,
+  retries = 10,
   delay = 10000
 ) => {
   let attempts = 0;
@@ -69,7 +69,9 @@ const checkAndCopyFileWithRetries = (
         console.log(`Files not found. Retrying in ${delay / 1000} seconds...`);
         setTimeout(tryCopyFile, delay);
       } else {
-        console.error(`Error: Files not found after ${retries} attempts.`);
+        console.error(
+          `Error: File bundle.umd.js not found after ${retries} attempts.`
+        );
         process.exit(1);
       }
     }
