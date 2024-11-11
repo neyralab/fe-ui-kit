@@ -15,13 +15,12 @@ yarn add github:neyralab/fe-ui-kit
 ```
 
 ## Peer Dependencies
-FE UI Kit relies on certain peer dependencies, which need to be installed in your project for compatibility. Ensure you have the following versions of `react`, `react-dom`, and `@ipld/car` installed:
+FE UI Kit relies on certain peer dependencies, which need to be installed in your project for compatibility. Ensure you have the following versions of `react` and `react-dom` installed:
 
 ```javascript
 "peerDependencies": {
   "react": "^17.0.0 || ^18.0.0",
-  "react-dom": "^17.0.0 || ^18.0.0",
-  "@ipld/car": "^5.2.4"
+  "react-dom": "^17.0.0 || ^18.0.0"
 }
 ```
 

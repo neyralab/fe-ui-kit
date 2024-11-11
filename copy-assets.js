@@ -8,14 +8,24 @@ if (isInNodeModules) {
   projectRoot = path.resolve(projectRoot, '../../');
 }
 
-const sourceIpldPath = path.resolve(
-  projectRoot,
-  'node_modules',
-  '@ipld',
-  'car',
-  'dist',
-  'index.min.js'
-);
+const sourceIpldPaths = [
+  path.resolve(
+    projectRoot,
+    'node_modules',
+    '@ipld',
+    'car',
+    'dist',
+    'index.min.js'
+  ),
+  path.resolve(
+    process.cwd(),
+    'node_modules',
+    '@ipld',
+    'car',
+    'dist',
+    'index.min.js'
+  ),
+];
 
 const gatewayPaths = [
   path.resolve(
@@ -69,7 +79,9 @@ const checkAndCopyFileWithRetries = (
         console.log(`Files not found. Retrying in ${delay / 1000} seconds...`);
         setTimeout(tryCopyFile, delay);
       } else {
-        console.error(`Error: File bundle.umd.js not found after ${retries} attempts.`);
+        console.error(
+          `Error: File bundle.umd.js not found after ${retries} attempts.`
+        );
         process.exit(1);
       }
     }
@@ -79,15 +91,16 @@ const checkAndCopyFileWithRetries = (
 };
 
 try {
-  if (!fs.existsSync(sourceIpldPath)) {
-    throw new Error(`Required file missing: ${sourceIpldPath}`);
-  }
-  fs.copyFileSync(sourceIpldPath, path.join(destPublicPath, 'index.min.js'));
-
   checkAndCopyFileWithRetries(
     gatewayPaths,
     path.join(destPublicPath, 'bundle.umd.js')
   );
+
+  const sourceIpldPath = sourceIpldPaths.find((path) => fs.existsSync(path));
+  if (!sourceIpldPath) {
+    throw new Error('Required file missing for @ipld/car');
+  }
+  fs.copyFileSync(sourceIpldPath, path.join(destPublicPath, 'index.min.js'));
 
   if (!fs.existsSync(sourceServiceWorkerPath)) {
     throw new Error(`Required file missing: ${sourceServiceWorkerPath}`);
