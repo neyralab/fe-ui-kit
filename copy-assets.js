@@ -17,25 +17,22 @@ const sourceIpldPath = path.resolve(
   'index.min.js'
 );
 
-// Check both possible paths for gdgateway-client
-let sourceGatewayPath = path.resolve(
-  projectRoot,
-  'node_modules',
-  'gdgateway-client',
-  'dist',
-  'bundle.umd.js'
-);
-
-if (!fs.existsSync(sourceGatewayPath)) {
-  // If not in root node_modules, check fe-ui-kit's node_modules
-  sourceGatewayPath = path.resolve(
+const gatewayPaths = [
+  path.resolve(
+    projectRoot,
+    'node_modules',
+    'gdgateway-client',
+    'dist',
+    'bundle.umd.js'
+  ),
+  path.resolve(
     process.cwd(),
     'node_modules',
     'gdgateway-client',
     'dist',
     'bundle.umd.js'
-  );
-}
+  ),
+];
 
 const sourceServiceWorkerPath = path.resolve(
   process.cwd(),
@@ -50,17 +47,45 @@ if (!fs.existsSync(destPublicPath)) {
   fs.mkdirSync(destPublicPath, { recursive: true });
 }
 
+const checkAndCopyFileWithRetries = (
+  filePaths,
+  destPath,
+  retries = 10,
+  delay = 10000
+) => {
+  let attempts = 0;
+
+  const tryCopyFile = () => {
+    attempts++;
+    const fileExists = filePaths.some((filePath) => fs.existsSync(filePath));
+
+    if (fileExists) {
+      const existingFilePath = filePaths.find((filePath) =>
+        fs.existsSync(filePath)
+      );
+      fs.copyFileSync(existingFilePath, destPath);
+    } else {
+      if (attempts < retries) {
+        console.log(`Files not found. Retrying in ${delay / 1000} seconds...`);
+        setTimeout(tryCopyFile, delay);
+      } else {
+        console.error(`Error: File bundle.umd.js not found after ${retries} attempts.`);
+        process.exit(1);
+      }
+    }
+  };
+
+  tryCopyFile();
+};
+
 try {
   if (!fs.existsSync(sourceIpldPath)) {
     throw new Error(`Required file missing: ${sourceIpldPath}`);
   }
   fs.copyFileSync(sourceIpldPath, path.join(destPublicPath, 'index.min.js'));
 
-  if (!fs.existsSync(sourceGatewayPath)) {
-    throw new Error(`Required file missing: ${sourceGatewayPath}`);
-  }
-  fs.copyFileSync(
-    sourceGatewayPath,
+  checkAndCopyFileWithRetries(
+    gatewayPaths,
     path.join(destPublicPath, 'bundle.umd.js')
   );
 
