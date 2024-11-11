@@ -21,7 +21,7 @@ const meta: Meta<typeof AudioPlayer> = {
     ),
   ],
   argTypes: {
-    onFinish: { action: 'finished' },
+    onEnded: { action: 'finished' },
     onError: { action: 'error' },
     onLoadedMetadata: { action: 'metadata loaded' },
     onTimeUpdate: { action: 'time updated' },
