@@ -21,7 +21,7 @@ FE UI Kit relies on certain peer dependencies, which need to be installed in you
 "peerDependencies": {
   "react": "^17.0.0 || ^18.0.0",
   "react-dom": "^17.0.0 || ^18.0.0",
-  "@ipld/car": "^5.3.0"
+  "@ipld/car": "^5.2.4"
 }
 ```
 
