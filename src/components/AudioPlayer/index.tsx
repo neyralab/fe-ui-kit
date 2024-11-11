@@ -1,25 +1,29 @@
-import { useEffect, useRef, useState } from 'react';
-import styles from './styles.module.scss';
+import { useEffect, useState } from 'react';
 import { MessageType } from '../../types/MessageType';
 
-interface VideoPlayerProps {
+interface AudioPlayerProps {
   slug: string;
-  decryptionKey?: string;
   apiUrl: string;
-  autoplay?: boolean;
+  decryptionKey?: string;
+
+  audioRef: React.RefObject<HTMLAudioElement>;
+  onFinish?: () => void;
+  onError?: (error: string) => void;
+  onLoadedMetadata?: (
+    event: React.SyntheticEvent<HTMLAudioElement, Event>
+  ) => void;
+  onTimeUpdate?: (event: React.SyntheticEvent<HTMLAudioElement, Event>) => void;
+
+  controls?: boolean;
   loop?: boolean;
   muted?: boolean;
-  controls?: boolean;
-  onPlay?: () => void;
-  onPause?: () => void;
-  onEnd?: () => void;
-  onError?: (error: string) => void;
-  onReadyToPlay?: () => void;
+  autoplay?: boolean;
+
   className?: string;
 }
 
-const generateVideoUrl = (slug: string, decryptionKey?: string): string => {
-  const baseUrl = 'non-existent-url/video.mp4';
+const generateAudioUrl = (slug: string, decryptionKey?: string): string => {
+  const baseUrl = 'non-existent-url/audio.mp3';
   const queryParams = new URLSearchParams({
     slug: slug,
     key: decryptionKey || '',
@@ -30,25 +34,24 @@ const generateVideoUrl = (slug: string, decryptionKey?: string): string => {
 
 let cacheCleared = false;
 
-const VideoPlayer = ({
+const AudioPlayer = ({
   slug,
   decryptionKey,
   apiUrl,
-  autoplay = true,
+  audioRef,
+  onFinish,
+  onError,
+  onLoadedMetadata,
+  onTimeUpdate,
+  controls = false,
   loop = false,
   muted = false,
-  controls = true,
-  onPlay,
-  onPause,
-  onEnd,
-  onError,
-  onReadyToPlay,
+  autoplay = false,
   className = '',
-}: VideoPlayerProps) => {
-  const videoRef = useRef<HTMLVideoElement | null>(null);
+}: AudioPlayerProps) => {
   const [error, setError] = useState<string>('');
   const [serviceWorkerReady, setServiceWorkerReady] = useState(false);
-  const [videoUrl, setVideoUrl] = useState<string>('');
+  const [audioUrl, setAudioUrl] = useState<string>('');
   const [apiUrlSaved, setApiUrlSaved] = useState(false);
 
   useEffect(() => {
@@ -80,7 +83,7 @@ const VideoPlayer = ({
         const { data } = event;
         if (data) {
           switch (data.type) {
-            case MessageType.VIDEO_ERROR:
+            case MessageType.AUDIO_ERROR:
               setError(data.message);
               break;
             case MessageType.API_URL_SAVED:
@@ -88,7 +91,7 @@ const VideoPlayer = ({
               break;
             case MessageType.API_URL_SAVE_FAILED:
               console.log('Failed to save API URL:', data.message);
-              setError('An unexpected error occurred while playing the video.');
+              setError('An unexpected error occurred while playing the audio.');
               break;
             case MessageType.CACHE_CLEARED:
               cacheCleared = true;
@@ -113,7 +116,7 @@ const VideoPlayer = ({
   useEffect(() => {
     if (serviceWorkerReady) {
       if (!apiUrl) {
-        setError('Backend url are required.');
+        setError('Backend URL is required.');
         return;
       }
 
@@ -128,11 +131,11 @@ const VideoPlayer = ({
   useEffect(() => {
     if (serviceWorkerReady && apiUrlSaved) {
       if (!slug) {
-        setError('Slug are required.');
+        setError('Slug is required.');
         return;
       }
-      const newVideoUrl = generateVideoUrl(slug, decryptionKey);
-      setVideoUrl(newVideoUrl);
+      const newAudioUrl = generateAudioUrl(slug, decryptionKey);
+      setAudioUrl(newAudioUrl);
       setError('');
     }
   }, [slug, decryptionKey, serviceWorkerReady, apiUrlSaved]);
@@ -143,57 +146,25 @@ const VideoPlayer = ({
     }
   }, [error]);
 
-  const handleLoadedData = () => {
-    if (autoplay && videoRef.current) {
-      videoRef.current.play().catch((error) => {
-        console.error(error);
-      });
-    }
-    onReadyToPlay?.();
-  };
-
-  const handlePlay = () => {
-    onPlay?.();
-  };
-
-  const handlePause = () => {
-    onPause?.();
-  };
-
-  const handleEnd = () => {
-    onEnd?.();
-  };
-
-  const handleError = async () => {
-    if (!videoUrl) {
-      return;
-    }
-    setError('An unexpected error occurred while playing the video.');
+  const handleError = () => {
+    setError('An unexpected error occurred while playing the audio.');
   };
 
   return (
-    <div className={`${styles.videoContainer} ${className}`}>
-      {error ? (
-        <div className={styles.errorMessage}>{error}</div>
-      ) : (
-        <video
-          ref={videoRef}
-          src={videoUrl}
-          loop={loop}
-          controls={controls}
-          muted={muted}
-          onPlay={handlePlay}
-          onPause={handlePause}
-          onEnded={handleEnd}
-          onError={handleError}
-          onLoadedData={handleLoadedData}
-          className={styles.video}
-        >
-          <p>Your browser does not support the video tag.</p>
-        </video>
-      )}
-    </div>
+    <audio
+      src={audioUrl}
+      ref={audioRef}
+      onEnded={onFinish}
+      onError={handleError}
+      onLoadedMetadata={onLoadedMetadata}
+      onTimeUpdate={onTimeUpdate}
+      controls={controls}
+      loop={loop}
+      muted={muted}
+      autoPlay={autoplay}
+      className={className}
+    />
   );
 };
 
-export default VideoPlayer;
+export default AudioPlayer;

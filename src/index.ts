@@ -12,3 +12,4 @@ export { default as SmallLogo } from './components/SmallLogo';
 export { default as NotificationBubble } from './components/NotificationBubble';
 export { default as BorderNotification } from './components/BorderNotification';
 export { default as VideoPlayer } from './components/VideoPlayer';
+export { default as AudioPlayer } from './components/AudioPlayer';

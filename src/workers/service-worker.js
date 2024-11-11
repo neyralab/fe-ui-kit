@@ -9,6 +9,7 @@ const CACHE_KEYS = {
   TOKEN: 'token-cache',
   ENTRY: 'entry-file-cache',
   VIDEO: 'video-cache',
+  AUDIO: 'audio-cache',
 };
 
 // Define cache expiration times in milliseconds
@@ -16,14 +17,21 @@ const EXPIRATION_TIMES = {
   [CACHE_KEYS.TOKEN]: 300000, // 5 minutes
   [CACHE_KEYS.ENTRY]: 300000, // 5 minutes
   [CACHE_KEYS.VIDEO]: 30 * 24 * 60 * 60 * 1000, // 1 month
+  [CACHE_KEYS.AUDIO]: 30 * 24 * 60 * 60 * 1000, // 1 month
 };
 
 const DECRYPTION_KEY_ERROR_MESSAGE =
   'The decryption key is invalid. Please check the key and try again.';
 const DEFAULT_ERROR_MESSAGE =
-  'An unexpected error occurred while playing the video.';
+  'An unexpected error occurred while playing the media.';
+
+const MEDIA_TYPES = {
+  VIDEO: 'VIDEO',
+  AUDIO: 'AUDIO',
+};
 
 const VIDEO_URL = 'non-existent-url/video.mp4';
+const AUDIO_URL = 'non-existent-url/audio.mp3';
 
 self.addEventListener('install', () => {
   console.log('Service Worker installing...');
@@ -100,35 +108,38 @@ async function getApiUrl() {
 }
 
 self.addEventListener('fetch', function (event) {
-  if (event.request.url.includes(VIDEO_URL)) {
-    event.respondWith(handleVideo(event));
+  const requestUrl = event.request.url;
+  if (requestUrl.includes(VIDEO_URL)) {
+    event.respondWith(handleMedia(event, MEDIA_TYPES.VIDEO));
+  } else if (requestUrl.includes(AUDIO_URL)) {
+    event.respondWith(handleMedia(event, MEDIA_TYPES.AUDIO));
   } else {
     event.respondWith(fetch(event.request));
   }
 });
 
-async function handleVideo(event) {
+async function handleMedia(event, mediaType) {
   const { request } = event;
   const { slug, decryptionKey } = extractParams(request);
   const apiUrl = await getApiUrl();
   const range = event.request.headers.get('range');
 
   if (!slug) {
-    return createErrorResponse('Requires slug.', 400);
+    return createErrorResponse('Requires slug.', 400, mediaType);
   }
 
   if (!apiUrl) {
-    return createErrorResponse('Requires backend url.', 400);
+    return createErrorResponse('Requires backend url.', 400, mediaType);
   }
 
   if (!range) {
-    return createErrorResponse('Requires Range header.', 400);
+    return createErrorResponse('Requires Range header.', 400, mediaType);
   }
 
   try {
     const tokenResponse = await fetchTokenWithCache(apiUrl, slug);
     if (!tokenResponse || tokenResponse.error) {
-      return createErrorResponse(tokenResponse?.error, 400);
+      return createErrorResponse(tokenResponse?.error, 400, mediaType);
     }
 
     const file = await fetchFileMetadataWithCache(
@@ -137,7 +148,7 @@ async function handleVideo(event) {
       tokenResponse.jwt_ott
     );
     if (!file || file.error) {
-      return createErrorResponse(file?.error, 400);
+      return createErrorResponse(file?.error, 400, mediaType);
     }
 
     const isEncrypted = !!file.is_clientside_encrypted;
@@ -147,7 +158,8 @@ async function handleVideo(event) {
     if (isEncrypted && !decryptionKey) {
       return createErrorResponse(
         'Decryption key is required for encrypted files.',
-        400
+        400,
+        mediaType
       );
     }
     const key = isEncrypted ? decryptionKey : undefined;
@@ -206,7 +218,7 @@ async function handleVideo(event) {
                   );
                 }
 
-                await caches.open(CACHE_KEYS.VIDEO).then((cache) => {
+                await caches.open(CACHE_KEYS[mediaType]).then((cache) => {
                   const response = new Response(readable, {
                     headers: { Date: new Date().toUTCString() },
                   });
@@ -214,7 +226,7 @@ async function handleVideo(event) {
                 });
               }
 
-              const cache = await caches.open(CACHE_KEYS.VIDEO);
+              const cache = await caches.open(CACHE_KEYS[mediaType]);
               const cachedResponse = await cache.match(filePath);
               const chunk = await cachedResponse.arrayBuffer();
               const uint8Array = new Uint8Array(
@@ -232,7 +244,7 @@ async function handleVideo(event) {
 
     return new Response(readableStream, { status: 206, headers });
   } catch (error) {
-    return createErrorResponse(DEFAULT_ERROR_MESSAGE, 500);
+    return createErrorResponse(DEFAULT_ERROR_MESSAGE, 500, mediaType);
   }
 }
 
@@ -320,7 +332,7 @@ async function fetchFileMetadata(apiUrl, slug, jwt_ott) {
   });
   const data = await response.json();
   if (!response.ok) {
-    return { error: data.errors || 'Failed to fetch video data.' };
+    return { error: data.errors || 'Failed to fetch media data.' };
   }
   return data.entry;
 }
@@ -337,7 +349,7 @@ function extractParams(request) {
   };
 }
 
-async function createErrorResponse(message, statusCode) {
+async function createErrorResponse(message, statusCode, mediaType) {
   const response = new Response(JSON.stringify({ error: message }), {
     status: statusCode,
     headers: {
@@ -347,7 +359,10 @@ async function createErrorResponse(message, statusCode) {
 
   const clients = await self.clients.matchAll({ includeUncontrolled: true });
   clients.forEach((client) => {
-    client.postMessage({ type: 'VIDEO_ERROR', message });
+    client.postMessage({
+      type: mediaType === MEDIA_TYPES.VIDEO ? 'VIDEO_ERROR' : 'AUDIO_ERROR',
+      message,
+    });
   });
 
   return response;
