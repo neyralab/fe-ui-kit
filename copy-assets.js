@@ -25,17 +25,18 @@ let sourceGatewayPath = path.resolve(
   'dist',
   'bundle.umd.js'
 );
-
-if (!fs.existsSync(sourceGatewayPath)) {
-  // If not in root node_modules, check fe-ui-kit's node_modules
-  sourceGatewayPath = path.resolve(
-    process.cwd(),
-    'node_modules',
-    'gdgateway-client',
-    'dist',
-    'bundle.umd.js'
-  );
-}
+console.warn('sourceGatewayPath', sourceGatewayPath)
+console.warn('projectRoot', projectRoot)
+// if (!fs.existsSync(sourceGatewayPath)) {
+//   // If not in root node_modules, check fe-ui-kit's node_modules
+//   sourceGatewayPath = path.resolve(
+//     process.cwd(),
+//     'node_modules',
+//     'gdgateway-client',
+//     'dist',
+//     'bundle.umd.js'
+//   );
+// }
 
 const sourceServiceWorkerPath = path.resolve(
   process.cwd(),
