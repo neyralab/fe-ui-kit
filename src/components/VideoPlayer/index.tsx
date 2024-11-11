@@ -165,6 +165,10 @@ const VideoPlayer = ({
     setError('An unexpected error occurred while playing the video.');
   };
 
+  if (!videoUrl) {
+    return null;
+  }
+
   return (
     <ReactPlayer
       ref={videoRef}

@@ -7,12 +7,13 @@ interface AudioPlayerProps {
   decryptionKey?: string;
 
   audioRef: React.RefObject<HTMLAudioElement>;
-  onFinish?: () => void;
+  onEnded?: () => void;
   onError?: (error: string) => void;
   onLoadedMetadata?: (
     event: React.SyntheticEvent<HTMLAudioElement, Event>
   ) => void;
   onTimeUpdate?: (event: React.SyntheticEvent<HTMLAudioElement, Event>) => void;
+  onCanPlay?: (event: React.SyntheticEvent<HTMLAudioElement, Event>) => void;
 
   controls?: boolean;
   loop?: boolean;
@@ -39,10 +40,11 @@ const AudioPlayer = ({
   decryptionKey,
   apiUrl,
   audioRef,
-  onFinish,
+  onEnded,
   onError,
   onLoadedMetadata,
   onTimeUpdate,
+  onCanPlay,
   controls = false,
   loop = false,
   muted = false,
@@ -153,14 +155,19 @@ const AudioPlayer = ({
     setError('An unexpected error occurred while playing the audio.');
   };
 
+  if (!audioUrl) {
+    return null;
+  }
+
   return (
     <audio
       src={audioUrl}
       ref={audioRef}
-      onEnded={onFinish}
+      onEnded={onEnded}
       onError={handleError}
       onLoadedMetadata={onLoadedMetadata}
       onTimeUpdate={onTimeUpdate}
+      onCanPlay={onCanPlay}
       controls={controls}
       loop={loop}
       muted={muted}
