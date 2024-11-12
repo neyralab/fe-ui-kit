@@ -2,7 +2,7 @@
   "name": "fe-ui-kit",
   "version": "1.0.0",
   "scripts": {
-    "postinstall": "npm run build && node copy-assets.js",
+    "postinstall": "node copy-assets.js",
     "storybook": "storybook dev -p 6006",
     "build-storybook": "storybook build",
     "build": "rimraf dist && rollup -c"
