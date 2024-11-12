@@ -62,11 +62,11 @@ const meta: Meta<typeof VideoPlayer> = {
     onPause: {
       action: 'paused',
     },
-    onEnd: { action: 'ended' },
+    onEnded: { action: 'ended' },
     onError: {
       action: 'error',
     },
-    onReadyToPlay: {
+    onReady: {
       action: 'ready to play',
     },
   },
