@@ -292,6 +292,7 @@ var ErrorMessages;
     ErrorMessages["SERVICE_WORKER_REGISTRATION_FAILED"] = "Service Worker registration failed.";
     ErrorMessages["DECRYPTION_KEY_ERROR"] = "The decryption key is invalid. Please check the key and try again.";
     ErrorMessages["DEFAULT_ERROR"] = "An unexpected error occurred while playing the media.";
+    ErrorMessages["DECRYPTION_KEY_REQUIRED"] = "Decryption key is required for encrypted files.";
 })(ErrorMessages || (ErrorMessages = {}));
 
 var generateVideoUrl = function (slug, decryptionKey) {
