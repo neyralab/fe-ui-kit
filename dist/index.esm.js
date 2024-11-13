@@ -1,6 +1,6 @@
 import { jsxs, jsx, Fragment } from 'react/jsx-runtime';
 import CN from 'classnames';
-import { useState, useEffect, useLayoutEffect } from 'react';
+import { useState, useEffect, useLayoutEffect, useRef } from 'react';
 import { CSSTransition, TransitionGroup } from 'react-transition-group';
 import ReactPlayer from 'react-player';
 
@@ -510,4 +510,93 @@ var AudioPlayer = function (_a) {
     return (jsx("audio", { src: audioUrl, ref: audioRef, onEnded: onEnded, onError: handleError, onLoadedMetadata: onLoadedMetadata, onTimeUpdate: onTimeUpdate, onCanPlay: onCanPlay, controls: controls, loop: loop, muted: muted, autoPlay: autoplay, className: className }));
 };
 
-export { AudioPlayer, Border, BorderNotification, Button, ChatBlock, ChatMessage, Input, NotificationBubble, Sidebar, SidebarBlock, SmallLogo, VideoPlayer };
+var AudioSVGImage = function (_a) {
+    var _b = _a.className, className = _b === void 0 ? '' : _b, _c = _a.color, color = _c === void 0 ? '#206ACF' : _c;
+    return (jsxs("svg", { viewBox: "0 0 494 141", fill: "none", xmlns: "http://www.w3.org/2000/svg", className: className, children: [jsx("path", { d: "M2 56.3984V84.3848", stroke: "white", strokeWidth: "3", strokeMiterlimit: "10" }), jsx("path", { d: "M9.69067 75.6283V65.1602", stroke: "white", strokeWidth: "3", strokeMiterlimit: "10" }), jsx("path", { d: "M17.3818 74.344V66.4395", stroke: "white", strokeWidth: "3", strokeMiterlimit: "10" }), jsx("path", { d: "M86.0303 74.344V66.4395", stroke: "white", strokeWidth: "3", strokeMiterlimit: "10" }), jsx("path", { d: "M25.0728 72.8531V67.9395", stroke: "white", strokeWidth: "3", strokeMiterlimit: "10" }), jsx("path", { d: "M32.7637 85.026V55.7578", stroke: "white", strokeWidth: "3", strokeMiterlimit: "10" }), jsx("path", { d: "M40.312 99.7683V40.8047", stroke: "white", strokeWidth: "3", strokeMiterlimit: "10" }), jsx("path", { d: "M48.0032 134.592V6.41016", stroke: "white", strokeWidth: "3", strokeMiterlimit: "10" }), jsx("path", { d: "M55.6938 94.8544V45.9316", stroke: "white", strokeWidth: "3", strokeMiterlimit: "10" }), jsx("path", { d: "M63.385 83.32V57.6836", stroke: "white", strokeWidth: "3", strokeMiterlimit: "10" }), jsx("path", { d: "M71.0757 94.8544V45.9316", stroke: "white", strokeWidth: "3", strokeMiterlimit: "10" }), jsx("path", { d: "M78.7666 77.9768V62.8086", stroke: "white", strokeWidth: "3", strokeMiterlimit: "10" }), jsx("path", { d: "M94.1484 77.9768V62.8086", stroke: "white", strokeWidth: "3", strokeMiterlimit: "10" }), jsx("path", { d: "M101.697 93.57V47.2109", stroke: "white", strokeWidth: "3", strokeMiterlimit: "10" }), jsx("path", { d: "M155.818 77.548V63.2344", stroke: "white", strokeWidth: "3", strokeMiterlimit: "10" }), jsx("path", { d: "M163.936 84.6011V56.1875", stroke: "white", strokeWidth: "3", strokeMiterlimit: "10" }), jsx("path", { d: "M171.485 67.9395V72.8531", stroke: "white", strokeWidth: "3", strokeMiterlimit: "10" }), jsx("path", { d: "M109.388 112.798V27.9844", stroke: "white", strokeWidth: "3", strokeMiterlimit: "10" }), jsx("path", { d: "M117.079 87.162V53.6211", stroke: "white", strokeWidth: "3", strokeMiterlimit: "10" }), jsx("path", { d: "M124.77 77.9768V62.8086", stroke: "white", strokeWidth: "3", strokeMiterlimit: "10" }), jsx("path", { d: "M132.461 74.344V66.4395", stroke: "white", strokeWidth: "3", strokeMiterlimit: "10" }), jsx("path", { d: "M179.603 84.6011V56.1875", stroke: "white", strokeWidth: "3", strokeMiterlimit: "10" }), jsx("path", { d: "M187.152 113.228V27.7734", stroke: "white", strokeWidth: "3", strokeMiterlimit: "10" }), jsx("path", { d: "M194.842 121.772V19.2266", stroke: "white", strokeWidth: "3", strokeMiterlimit: "10" }), jsx("path", { d: "M202.533 141V0", stroke: "white", strokeWidth: "3", strokeMiterlimit: "10" }), jsx("path", { d: "M210.224 121.772V19.2266", stroke: "white", strokeWidth: "3", strokeMiterlimit: "10" }), jsx("path", { d: "M217.915 34.1797V106.816", stroke: "white", strokeWidth: "3", strokeMiterlimit: "10" }), jsx("path", { d: "M140.152 93.57V47.2109", stroke: "white", strokeWidth: "3", strokeMiterlimit: "10" }), jsx("path", { d: "M147.842 80.754V60.0312", stroke: "white", strokeWidth: "3", strokeMiterlimit: "10" }), jsx("path", { d: "M227.03 44.2207V96.5616", stroke: "white", strokeWidth: "3", strokeMiterlimit: "10" }), jsx("path", { d: "M234.721 53.4082V87.59", stroke: "white", strokeWidth: "3", strokeMiterlimit: "10" }), jsx("path", { d: "M242.412 74.344V66.4395", stroke: "white", strokeWidth: "3", strokeMiterlimit: "10" }), jsx("path", { d: "M311.061 83.32V57.6836", stroke: "white", strokeWidth: "3", strokeMiterlimit: "10" }), jsx("path", { d: "M250.103 72.8531V67.9395", stroke: "white", strokeWidth: "3", strokeMiterlimit: "10" }), jsx("path", { d: "M483.109 66.4395V74.344", stroke: "white", strokeWidth: "3", strokeMiterlimit: "10" }), jsx("path", { d: "M473.994 53.6211V87.162", stroke: "white", strokeWidth: "3", strokeMiterlimit: "10" }), jsx("path", { d: "M458.612 66.4395V74.344", stroke: "white", strokeWidth: "3", strokeMiterlimit: "10" }), jsx("path", { d: "M257.794 85.026V55.7578", stroke: "white", strokeWidth: "3", strokeMiterlimit: "10" }), jsx("path", { d: "M265.342 99.7683V40.8047", stroke: "white", strokeWidth: "3", strokeMiterlimit: "10" }), jsx("path", { d: "M273.033 87.162V53.6211", stroke: "white", strokeWidth: "3", strokeMiterlimit: "10" }), jsx("path", { d: "M280.724 94.8544V45.9316", stroke: "white", strokeWidth: "3", strokeMiterlimit: "10" }), jsx("path", { d: "M288.415 112.798V27.9844", stroke: "white", strokeWidth: "3", strokeMiterlimit: "10" }), jsx("path", { d: "M296.106 107.672V33.1133", stroke: "white", strokeWidth: "3", strokeMiterlimit: "10" }), jsx("path", { d: "M303.797 99.982V40.8047", stroke: "white", strokeWidth: "3", strokeMiterlimit: "10" }), jsx("path", { d: "M319.179 107.672V33.1133", stroke: "white", strokeWidth: "3", strokeMiterlimit: "10" }), jsx("path", { d: "M326.727 121.772V19.2266", stroke: "white", strokeWidth: "3", strokeMiterlimit: "10" }), jsx("path", { d: "M380.848 74.344V66.4395", stroke: "white", strokeWidth: "3", strokeMiterlimit: "10" }), jsx("path", { d: "M388.967 77.9768V62.8086", stroke: "white", strokeWidth: "3", strokeMiterlimit: "10" }), jsx("path", { d: "M396.515 69.2188V71.5688", stroke: "white", strokeWidth: "3", strokeMiterlimit: "10" }), jsx("path", { d: "M491.655 69.2188V71.5688", stroke: "white", strokeWidth: "3", strokeMiterlimit: "10" }), jsx("path", { d: "M466.018 77.9768V62.8086", stroke: "white", strokeWidth: "3", strokeMiterlimit: "10" }), jsx("path", { d: "M450.352 69.2188V71.5688", stroke: "white", strokeWidth: "3", strokeMiterlimit: "10" }), jsx("path", { d: "M334.418 141V0", stroke: "white", strokeWidth: "3", strokeMiterlimit: "10" }), jsx("path", { d: "M342.109 107.672V33.1133", stroke: "white", strokeWidth: "3", strokeMiterlimit: "10" }), jsx("path", { d: "M349.8 93.57V47.2109", stroke: "white", strokeWidth: "3", strokeMiterlimit: "10" }), jsx("path", { d: "M357.491 80.754V60.0312", stroke: "white", strokeWidth: "3", strokeMiterlimit: "10" }), jsx("path", { d: "M404.633 77.9768V62.8086", stroke: "white", strokeWidth: "3", strokeMiterlimit: "10" }), jsx("path", { d: "M412.182 93.57V47.2109", stroke: "white", strokeWidth: "3", strokeMiterlimit: "10" }), jsx("path", { d: "M419.873 79.2611V61.5293", stroke: "white", strokeWidth: "3", strokeMiterlimit: "10" }), jsx("path", { d: "M427.564 87.162V53.6211", stroke: "white", strokeWidth: "3", strokeMiterlimit: "10" }), jsx("path", { d: "M435.254 77.9768V62.8086", stroke: "white", strokeWidth: "3", strokeMiterlimit: "10" }), jsx("path", { d: "M442.946 74.344V66.4395", stroke: "white", strokeWidth: "3", strokeMiterlimit: "10" }), jsx("path", { d: "M365.182 93.57V47.2109", stroke: "white", strokeWidth: "3", strokeMiterlimit: "10" }), jsx("path", { d: "M372.873 80.754V60.0312", stroke: "white", strokeWidth: "3", strokeMiterlimit: "10" }), jsx("path", { d: "M2 56.3984V84.3848", stroke: color, strokeWidth: "3", strokeMiterlimit: "10" }), jsx("path", { d: "M9.69067 75.6283V65.1602", stroke: color, strokeWidth: "3", strokeMiterlimit: "10" }), jsx("path", { d: "M17.3818 74.344V66.4395", stroke: color, strokeWidth: "3", strokeMiterlimit: "10" }), jsx("path", { d: "M86.0303 74.344V66.4395", stroke: color, strokeWidth: "3", strokeMiterlimit: "10" }), jsx("path", { d: "M25.0728 72.8531V67.9395", stroke: color, strokeWidth: "3", strokeMiterlimit: "10" }), jsx("path", { d: "M32.7637 85.026V55.7578", stroke: color, strokeWidth: "3", strokeMiterlimit: "10" }), jsx("path", { d: "M40.312 99.7683V40.8047", stroke: color, strokeWidth: "3", strokeMiterlimit: "10" }), jsx("path", { d: "M48.0032 134.592V6.41016", stroke: color, strokeWidth: "3", strokeMiterlimit: "10" }), jsx("path", { d: "M55.6938 94.8544V45.9316", stroke: color, strokeWidth: "3", strokeMiterlimit: "10" }), jsx("path", { d: "M63.385 83.32V57.6836", stroke: color, strokeWidth: "3", strokeMiterlimit: "10" }), jsx("path", { d: "M71.0757 94.8544V45.9316", stroke: color, strokeWidth: "3", strokeMiterlimit: "10" }), jsx("path", { d: "M78.7666 77.9768V62.8086", stroke: color, strokeWidth: "3", strokeMiterlimit: "10" }), jsx("path", { d: "M94.1484 77.9768V62.8086", stroke: color, strokeWidth: "3", strokeMiterlimit: "10" }), jsx("path", { d: "M101.697 93.57V47.2109", stroke: color, strokeWidth: "3", strokeMiterlimit: "10" }), jsx("path", { d: "M155.818 77.548V63.2344", stroke: color, strokeWidth: "3", strokeMiterlimit: "10" }), jsx("path", { d: "M163.936 84.6011V56.1875", stroke: color, strokeWidth: "3", strokeMiterlimit: "10" }), jsx("path", { d: "M171.485 67.9395V72.8531", stroke: color, strokeWidth: "3", strokeMiterlimit: "10" }), jsx("path", { d: "M109.388 112.798V27.9844", stroke: color, strokeWidth: "3", strokeMiterlimit: "10" }), jsx("path", { d: "M117.079 87.162V53.6211", stroke: color, strokeWidth: "3", strokeMiterlimit: "10" }), jsx("path", { d: "M124.77 77.9768V62.8086", stroke: color, strokeWidth: "3", strokeMiterlimit: "10" }), jsx("path", { d: "M132.461 74.344V66.4395", stroke: color, strokeWidth: "3", strokeMiterlimit: "10" }), jsx("path", { d: "M179.603 84.6011V56.1875", stroke: color, strokeWidth: "3", strokeMiterlimit: "10" }), jsx("path", { d: "M187.152 113.228V27.7734", stroke: color, strokeWidth: "3", strokeMiterlimit: "10" }), jsx("path", { d: "M194.842 121.772V19.2266", stroke: color, strokeWidth: "3", strokeMiterlimit: "10" }), jsx("path", { d: "M202.533 141V0", stroke: color, strokeWidth: "3", strokeMiterlimit: "10" }), jsx("path", { d: "M210.224 121.772V19.2266", stroke: color, strokeWidth: "3", strokeMiterlimit: "10" }), jsx("path", { d: "M217.915 34.1797V106.816", stroke: color, strokeWidth: "3", strokeMiterlimit: "10" }), jsx("path", { d: "M140.152 93.57V47.2109", stroke: color, strokeWidth: "3", strokeMiterlimit: "10" }), jsx("path", { d: "M147.842 80.754V60.0312", stroke: color, strokeWidth: "3", strokeMiterlimit: "10" })] }));
+};
+
+var PlayIcon = function () { return (jsx("svg", { viewBox: "0 0 12 16", fill: "none", xmlns: "http://www.w3.org/2000/svg", children: jsx("path", { d: "M0 0L12 8L0 16V0Z", fill: "currentColor" }) })); };
+var PauseIcon = function () { return jsx("span", { children: "||" }); };
+var MutedVolumeIcon = function () { return (jsx("svg", { xmlns: "http://www.w3.org/2000/svg", "aria-hidden": "true", role: "img", viewBox: "0 0 24 24", children: jsx("path", { d: "M3 9h4l5-5v16l-5-5H3V9m13.59 3L14 9.41L15.41 8L18 10.59L20.59 8L22 9.41L19.41 12L22 14.59L20.59 16L18 13.41L15.41 16L14 14.59L16.59 12z", fill: "currentColor" }) })); };
+var UnmutedVolumeIcon = function () { return (jsx("svg", { xmlns: "http://www.w3.org/2000/svg", "aria-hidden": "true", role: "img", viewBox: "0 0 24 24", children: jsx("path", { d: "M14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.84-5 6.7v2.07c4-.91 7-4.49 7-8.77c0-4.28-3-7.86-7-8.77M16.5 12c0-1.77-1-3.29-2.5-4.03V16c1.5-.71 2.5-2.24 2.5-4M3 9v6h4l5 5V4L7 9H3z", fill: "currentColor" }) })); };
+
+var formatTime = function (time) {
+    var minutes = Math.floor(time / 60);
+    var seconds = Math.floor(time % 60);
+    return "".concat(minutes, ":").concat(seconds < 10 ? '0' : '').concat(seconds);
+};
+var AudioController = function (_a) {
+    var _b, _c;
+    var audioRef = _a.audioRef;
+    var progressBarRef = useRef(null);
+    var _d = useState(false), isPlaying = _d[0], setIsPlaying = _d[1];
+    var _e = useState(false), isMuted = _e[0], setIsMuted = _e[1];
+    var _f = useState(100), volume = _f[0], setVolume = _f[1];
+    var _g = useState(0), progress = _g[0], setProgress = _g[1];
+    var handleVolume = function (event) {
+        if (audioRef.current) {
+            var barWidth = event.currentTarget.offsetWidth;
+            var clickPosition = event.nativeEvent.offsetX;
+            var newVolume = clickPosition / barWidth;
+            audioRef.current.volume = newVolume;
+            setVolume(newVolume * 100);
+        }
+    };
+    var handlePlayPause = function () {
+        if (audioRef.current) {
+            if (audioRef.current.paused) {
+                audioRef.current.play();
+                setIsPlaying(true);
+            }
+            else {
+                audioRef.current.pause();
+                setIsPlaying(false);
+            }
+        }
+    };
+    var handleMuteUnmute = function () {
+        if (audioRef.current) {
+            audioRef.current.muted = !audioRef.current.muted;
+            setIsMuted(audioRef.current.muted);
+        }
+    };
+    var handleSeek = function (e) {
+        if (audioRef.current) {
+            var progressContainer = e.currentTarget;
+            var seekTime = (e.nativeEvent.offsetX / progressContainer.offsetWidth) *
+                audioRef.current.duration;
+            audioRef.current.currentTime = seekTime;
+        }
+    };
+    useEffect(function () {
+        var audio = audioRef.current;
+        var updateProgress = function () {
+            if (audio && progressBarRef.current) {
+                var progress_1 = (audio.currentTime / audio.duration) * 100;
+                progressBarRef.current.style.width = "".concat(progress_1, "%");
+                setProgress(progress_1);
+            }
+        };
+        var handleAudioEnd = function () {
+            if (audio) {
+                audio.pause();
+                setIsPlaying(false);
+            }
+        };
+        if (audio) {
+            audio.addEventListener('timeupdate', updateProgress);
+            audio.addEventListener('ended', handleAudioEnd);
+        }
+        return function () {
+            if (audio) {
+                audio.removeEventListener('timeupdate', updateProgress);
+                audio.addEventListener('ended', handleAudioEnd);
+            }
+        };
+    }, [audioRef.current]);
+    return (jsxs("div", { className: "player_main player_horizontal-reverse", children: [jsxs("div", { className: "player_progress-section", children: [jsx("div", { id: "player_current-time", className: "player_time player_current-time", children: formatTime(((_b = audioRef.current) === null || _b === void 0 ? void 0 : _b.currentTime) || 0) }), jsx("div", { className: "player_time", children: "/" }), jsx("div", { className: "player_time player_total-time", children: formatTime(((_c = audioRef.current) === null || _c === void 0 ? void 0 : _c.duration) || 0) }), jsx("div", { className: "player_progress-container", role: "progressbar", "aria-valuemin": 0, "aria-valuemax": 100, "aria-valuenow": progress, onClick: handleSeek, children: jsx("div", { className: "player_progress-bar", children: jsx("div", { ref: progressBarRef, className: "player_progress-indicator", style: {
+                                    width: "".concat(progress, "%"),
+                                } }) }) }), jsxs("div", { className: "player_volume-container", children: [jsx("button", { type: "button", className: "player_button-clear player_volume-button", onClick: handleMuteUnmute, children: isMuted ? jsx(MutedVolumeIcon, {}) : jsx(UnmutedVolumeIcon, {}) }), jsx("div", { role: "progressbar", "aria-label": "Volume control", "aria-valuemin": 0, "aria-valuemax": 100, "aria-valuenow": volume, tabIndex: 0, className: "player_volume-bar-area", onClick: handleVolume, children: jsx("div", { className: "player_volume-bar", children: jsx("div", { className: "player_volume-indicator", style: { left: "".concat(volume, "%") } }) }) })] })] }), jsx("div", { className: "player_controls-section", children: jsx("div", { className: "player_main-controls", children: jsx("button", { "aria-label": "Play", className: "player_button-clear player_main-controls-button player_play-pause-button", type: "button", onClick: handlePlayPause, children: isPlaying ? jsx(PauseIcon, {}) : jsx(PlayIcon, {}) }) }) })] }));
+};
+
+export { AudioController, AudioPlayer, AudioSVGImage, Border, BorderNotification, Button, ChatBlock, ChatMessage, Input, NotificationBubble, Sidebar, SidebarBlock, SmallLogo, VideoPlayer };

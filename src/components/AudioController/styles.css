@@ -1,0 +1,258 @@
+.player_container {
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  line-height: 1;
+  font-family: inherit;
+  width: 100%;
+  padding: 10px 15px;
+  background-color: #fff;
+  box-shadow: 0 0 3px 0 rgba(0, 0, 0, 0.2);
+}
+.player_container:focus:not(:focus-visible) {
+  outline: 0;
+}
+.player_container svg {
+  vertical-align: initial;
+}
+
+.player_header {
+  margin-bottom: 10px;
+}
+
+.player_footer {
+  margin-top: 5px;
+}
+
+.player_main {
+  display: flex;
+  flex-direction: column;
+  flex: 1 1 auto;
+}
+
+.player_stacked .player_controls-section {
+  margin-top: 8px;
+}
+
+.player_horizontal {
+  flex-direction: row;
+}
+.player_horizontal .player_controls-section {
+  margin-left: 8px;
+}
+
+.player_horizontal-reverse {
+  flex-direction: row-reverse;
+}
+.player_horizontal-reverse .player_controls-section {
+  margin-right: 8px;
+}
+
+.player_stacked-reverse {
+  flex-direction: column-reverse;
+}
+.player_stacked-reverse .player_controls-section {
+  margin-bottom: 8px;
+}
+
+.player_progress-section {
+  display: flex;
+  flex: 3 1 auto;
+  align-items: center;
+}
+
+.player_progress-container {
+  display: flex;
+  align-items: center;
+  height: 20px;
+  flex: 1 0 auto;
+  align-self: center;
+  margin: 0 calc(10px + 1%);
+  cursor: pointer;
+  user-select: none;
+  -webkit-user-select: none;
+}
+.player_progress-container:focus:not(:focus-visible) {
+  outline: 0;
+}
+
+.player_time {
+  color: #333;
+  font-size: 16px;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+.player_progress-bar {
+  box-sizing: border-box;
+  position: relative;
+  z-index: 0;
+  width: 100%;
+  height: 5px;
+  background-color: #dddddd;
+  border-radius: 2px;
+}
+
+.player_progress-filled {
+  height: 100%;
+  position: absolute;
+  z-index: 2;
+  background-color: #868686;
+  border-radius: 2px;
+}
+
+.player_progress-bar-show-download {
+  background-color: rgba(221, 221, 221, 0.5);
+}
+
+.player_download-progress {
+  height: 100%;
+  position: absolute;
+  z-index: 1;
+  background-color: #dddddd;
+  border-radius: 2px;
+}
+
+.player_progress-indicator {
+  box-sizing: border-box;
+  position: absolute;
+  z-index: 3;
+  width: 20px;
+  height: 20px;
+  margin-left: -10px;
+  top: -8px;
+  background: #868686;
+  border-radius: 50px;
+  box-shadow: rgba(134, 134, 134, 0.5) 0 0 5px;
+}
+
+.player_controls-section {
+  display: flex;
+  flex: 1 1 auto;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.player_additional-controls {
+  display: flex;
+  flex: 1 0 auto;
+  align-items: center;
+}
+
+.player_repeat-button {
+  font-size: 26px;
+  width: 26px;
+  height: 26px;
+  color: #868686;
+  margin-right: 6px;
+}
+
+.player_main-controls {
+  flex: 0 1 auto;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.player_main-controls-button {
+  margin: 0 3px;
+  color: #868686;
+  font-size: 35px;
+  width: 35px;
+  height: 35px;
+}
+
+.player_play-pause-button {
+  font-size: 40px;
+  width: 40px;
+  height: 40px;
+}
+
+.player_volume-controls {
+  display: flex;
+  flex: 1 0 auto;
+  justify-content: flex-end;
+  align-items: center;
+}
+
+.player_volume-button {
+  flex: 0 0 26px;
+  font-size: 26px;
+  width: 26px;
+  height: 26px;
+  color: #868686;
+  margin-right: 6px;
+}
+
+.player_volume-container {
+  display: flex;
+  align-items: center;
+  flex: 0 1 100px;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+.player_volume-bar-area {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  height: 14px;
+  cursor: pointer;
+}
+.player_volume-bar-area:focus:not(:focus-visible) {
+  outline: 0;
+}
+
+.player_volume-bar {
+  box-sizing: border-box;
+  position: relative;
+  width: 100%;
+  height: 4px;
+  background: #dddddd;
+  border-radius: 2px;
+}
+
+.player_volume-indicator {
+  box-sizing: border-box;
+  position: absolute;
+  width: 12px;
+  height: 12px;
+  margin-left: -6px;
+  left: 0;
+  top: -4px;
+  background: #868686;
+  opacity: 0.9;
+  border-radius: 50px;
+  box-shadow: rgba(134, 134, 134, 0.5) 0 0 3px;
+  cursor: pointer;
+}
+.player_volume-indicator:hover {
+  opacity: 0.9;
+}
+
+.player_volume-filled {
+  height: 100%;
+  position: absolute;
+  z-index: 2;
+  background-color: #868686;
+  border-radius: 2px;
+}
+
+/* Utils */
+.player_button-clear {
+  background-color: transparent;
+  border: none;
+  padding: 0;
+  overflow: hidden;
+  cursor: pointer;
+}
+.player_button-clear:hover {
+  opacity: 0.9;
+  transition-duration: 0.2s;
+}
+.player_button-clear:active {
+  opacity: 0.95;
+}
+.player_button-clear:focus:not(:focus-visible) {
+  outline: 0;
+}

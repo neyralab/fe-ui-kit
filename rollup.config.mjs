@@ -23,7 +23,8 @@ export default [
       typescript(),
       postcss({
         extract: path.resolve('dist/styles.css'),
-        minimize: true,
+        minimize: false,
+        modules: false,
       }),
     ],
     external: (id) => /node_modules/.test(id),
