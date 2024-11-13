@@ -537,19 +537,11 @@ var AudioController = function (_a) {
     var _b, _c;
     var audioRef = _a.audioRef;
     var progressBarRef = useRef(null);
+    var volumeBarRef = useRef(null);
     var _d = useState(false), isPlaying = _d[0], setIsPlaying = _d[1];
     var _e = useState(false), isMuted = _e[0], setIsMuted = _e[1];
     var _f = useState(100), volume = _f[0], setVolume = _f[1];
     var _g = useState(0), progress = _g[0], setProgress = _g[1];
-    var handleVolume = function (event) {
-        if (audioRef.current) {
-            var barWidth = event.currentTarget.offsetWidth;
-            var clickPosition = event.nativeEvent.offsetX;
-            var newVolume = clickPosition / barWidth;
-            audioRef.current.volume = newVolume;
-            setVolume(newVolume * 100);
-        }
-    };
     var handlePlayPause = function () {
         if (audioRef.current) {
             if (audioRef.current.paused) {
@@ -602,9 +594,37 @@ var AudioController = function (_a) {
             }
         };
     }, [audioRef.current]);
+    var getVolumeFromPosition = function (position) {
+        if (volumeBarRef.current) {
+            var barRect = volumeBarRef.current.getBoundingClientRect();
+            var relativePos = Math.min(Math.max(position - barRect.left, 0), barRect.width);
+            return (relativePos / barRect.width) * 100;
+        }
+        return 0;
+    };
+    var handleMouseDown = function (e) {
+        var newVolume = getVolumeFromPosition(e.clientX);
+        setVolume(newVolume);
+        if (audioRef.current) {
+            audioRef.current.volume = newVolume / 100;
+        }
+        var handleMouseMove = function (e) {
+            var updatedVolume = getVolumeFromPosition(e.clientX);
+            setVolume(updatedVolume);
+            if (audioRef.current) {
+                audioRef.current.volume = updatedVolume / 100;
+            }
+        };
+        var handleMouseUp = function () {
+            window.removeEventListener('mousemove', handleMouseMove);
+            window.removeEventListener('mouseup', handleMouseUp);
+        };
+        window.addEventListener('mousemove', handleMouseMove);
+        window.addEventListener('mouseup', handleMouseUp);
+    };
     return (jsxs("div", { className: "rhap_main rhap_horizontal-reverse", children: [jsxs("div", { className: "rhap_progress-section", children: [jsx("div", { id: "rhap_current-time", className: "rhap_time rhap_current-time", children: formatTime(((_b = audioRef.current) === null || _b === void 0 ? void 0 : _b.currentTime) || 0) }), jsx("div", { className: "rhap_time", children: "/" }), jsx("div", { className: "rhap_time rhap_total-time", children: formatTime(((_c = audioRef.current) === null || _c === void 0 ? void 0 : _c.duration) || 0) }), jsx("div", { className: "rhap_progress-container", role: "progressbar", "aria-valuemin": 0, "aria-valuemax": 100, "aria-valuenow": progress, onClick: handleSeek, children: jsx("div", { className: "rhap_progress-bar", children: jsx("div", { ref: progressBarRef, className: "rhap_progress-indicator", style: {
                                     width: "".concat(progress, "%"),
-                                } }) }) }), jsxs("div", { className: "rhap_volume-container", children: [jsx("button", { type: "button", className: "rhap_button-clear rhap_volume-button", onClick: handleMuteUnmute, children: isMuted ? jsx(MutedVolumeIcon, {}) : jsx(UnmutedVolumeIcon, {}) }), jsx("div", { role: "progressbar", "aria-label": "Volume control", "aria-valuemin": 0, "aria-valuemax": 100, "aria-valuenow": volume, tabIndex: 0, className: "rhap_volume-bar-area", onClick: handleVolume, children: jsx("div", { className: "rhap_volume-bar", children: jsx("div", { className: "rhap_volume-indicator", style: { left: "".concat(volume, "%") } }) }) })] })] }), jsx("div", { className: "rhap_controls-section", children: jsx("div", { className: "rhap_main-controls", children: jsx("button", { "aria-label": "Play", className: "rhap_button-clear rhap_main-controls-button rhap_play-pause-button", type: "button", onClick: handlePlayPause, children: isPlaying ? jsx(PauseIcon, {}) : jsx(PlayIcon, {}) }) }) })] }));
+                                } }) }) }), jsxs("div", { className: "rhap_volume-container", children: [jsx("button", { type: "button", className: "rhap_button-clear rhap_volume-button", onClick: handleMuteUnmute, children: isMuted ? jsx(MutedVolumeIcon, {}) : jsx(UnmutedVolumeIcon, {}) }), jsx("div", { role: "progressbar", "aria-label": "Volume control", "aria-valuemin": 0, "aria-valuemax": 100, "aria-valuenow": volume, tabIndex: 0, className: "rhap_volume-bar-area", onMouseDown: handleMouseDown, ref: volumeBarRef, children: jsx("div", { className: "rhap_volume-bar", children: jsx("div", { className: "rhap_volume-indicator", style: { left: "".concat(volume, "%") } }) }) })] })] }), jsx("div", { className: "rhap_controls-section", children: jsx("div", { className: "rhap_main-controls", children: jsx("button", { "aria-label": "Play", className: "rhap_button-clear rhap_main-controls-button rhap_play-pause-button", type: "button", onClick: handlePlayPause, children: isPlaying ? jsx(PauseIcon, {}) : jsx(PlayIcon, {}) }) }) })] }));
 };
 
 export { AudioController, AudioPlayer, AudioSVGImage, Border, BorderNotification, Button, ChatBlock, ChatMessage, ErrorMessages, Input, NotificationBubble, Sidebar, SidebarBlock, SmallLogo, VideoPlayer };

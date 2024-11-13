@@ -19,23 +19,12 @@ const formatTime = (time: number) => {
 
 const AudioController: React.FC<AudioControllerProps> = ({ audioRef }) => {
   const progressBarRef = useRef<HTMLDivElement>(null);
+  const volumeBarRef = useRef<HTMLDivElement | null>(null);
 
   const [isPlaying, setIsPlaying] = useState(false);
   const [isMuted, setIsMuted] = useState(false);
   const [volume, setVolume] = useState(100);
   const [progress, setProgress] = useState(0);
-
-  const handleVolume = (
-    event: React.MouseEvent<HTMLDivElement, MouseEvent>
-  ) => {
-    if (audioRef.current) {
-      const barWidth = event.currentTarget.offsetWidth;
-      const clickPosition = event.nativeEvent.offsetX;
-      const newVolume = clickPosition / barWidth;
-      audioRef.current.volume = newVolume;
-      setVolume(newVolume * 100);
-    }
-  };
 
   const handlePlayPause = () => {
     if (audioRef.current) {
@@ -97,13 +86,46 @@ const AudioController: React.FC<AudioControllerProps> = ({ audioRef }) => {
     };
   }, [audioRef.current]);
 
+  const getVolumeFromPosition = (position: number): number => {
+    if (volumeBarRef.current) {
+      const barRect = volumeBarRef.current.getBoundingClientRect();
+      const relativePos = Math.min(
+        Math.max(position - barRect.left, 0),
+        barRect.width
+      );
+      return (relativePos / barRect.width) * 100;
+    }
+    return 0;
+  };
+
+  const handleMouseDown = (e: React.MouseEvent): void => {
+    const newVolume = getVolumeFromPosition(e.clientX);
+    setVolume(newVolume);
+    if (audioRef.current) {
+      audioRef.current.volume = newVolume / 100;
+    }
+
+    const handleMouseMove = (e: MouseEvent): void => {
+      const updatedVolume = getVolumeFromPosition(e.clientX);
+      setVolume(updatedVolume);
+      if (audioRef.current) {
+        audioRef.current.volume = updatedVolume / 100;
+      }
+    };
+
+    const handleMouseUp = (): void => {
+      window.removeEventListener('mousemove', handleMouseMove);
+      window.removeEventListener('mouseup', handleMouseUp);
+    };
+
+    window.addEventListener('mousemove', handleMouseMove);
+    window.addEventListener('mouseup', handleMouseUp);
+  };
+
   return (
     <div className="rhap_main rhap_horizontal-reverse">
       <div className="rhap_progress-section">
-        <div
-          id="rhap_current-time"
-          className="rhap_time rhap_current-time"
-        >
+        <div id="rhap_current-time" className="rhap_time rhap_current-time">
           {formatTime(audioRef.current?.currentTime || 0)}
         </div>
         <div className="rhap_time">/</div>
@@ -146,7 +168,8 @@ const AudioController: React.FC<AudioControllerProps> = ({ audioRef }) => {
             aria-valuenow={volume}
             tabIndex={0}
             className="rhap_volume-bar-area"
-            onClick={handleVolume}
+            onMouseDown={handleMouseDown}
+            ref={volumeBarRef}
           >
             <div className="rhap_volume-bar">
               <div
