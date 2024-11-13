@@ -98,31 +98,31 @@ const AudioController: React.FC<AudioControllerProps> = ({ audioRef }) => {
   }, [audioRef.current]);
 
   return (
-    <div className="player_main player_horizontal-reverse">
-      <div className="player_progress-section">
+    <div className="rhap_main rhap_horizontal-reverse">
+      <div className="rhap_progress-section">
         <div
-          id="player_current-time"
-          className="player_time player_current-time"
+          id="rhap_current-time"
+          className="rhap_time rhap_current-time"
         >
           {formatTime(audioRef.current?.currentTime || 0)}
         </div>
-        <div className="player_time">/</div>
-        <div className="player_time player_total-time">
+        <div className="rhap_time">/</div>
+        <div className="rhap_time rhap_total-time">
           {formatTime(audioRef.current?.duration || 0)}
         </div>
 
         <div
-          className="player_progress-container"
+          className="rhap_progress-container"
           role="progressbar"
           aria-valuemin={0}
           aria-valuemax={100}
           aria-valuenow={progress}
           onClick={handleSeek}
         >
-          <div className="player_progress-bar">
+          <div className="rhap_progress-bar">
             <div
               ref={progressBarRef}
-              className="player_progress-indicator"
+              className="rhap_progress-indicator"
               style={{
                 width: `${progress}%`,
               }}
@@ -130,10 +130,10 @@ const AudioController: React.FC<AudioControllerProps> = ({ audioRef }) => {
           </div>
         </div>
 
-        <div className="player_volume-container">
+        <div className="rhap_volume-container">
           <button
             type="button"
-            className="player_button-clear player_volume-button"
+            className="rhap_button-clear rhap_volume-button"
             onClick={handleMuteUnmute}
           >
             {isMuted ? <MutedVolumeIcon /> : <UnmutedVolumeIcon />}
@@ -145,12 +145,12 @@ const AudioController: React.FC<AudioControllerProps> = ({ audioRef }) => {
             aria-valuemax={100}
             aria-valuenow={volume}
             tabIndex={0}
-            className="player_volume-bar-area"
+            className="rhap_volume-bar-area"
             onClick={handleVolume}
           >
-            <div className="player_volume-bar">
+            <div className="rhap_volume-bar">
               <div
-                className="player_volume-indicator"
+                className="rhap_volume-indicator"
                 style={{ left: `${volume}%` }}
               ></div>
             </div>
@@ -158,11 +158,11 @@ const AudioController: React.FC<AudioControllerProps> = ({ audioRef }) => {
         </div>
       </div>
 
-      <div className="player_controls-section">
-        <div className="player_main-controls">
+      <div className="rhap_controls-section">
+        <div className="rhap_main-controls">
           <button
             aria-label="Play"
-            className="player_button-clear player_main-controls-button player_play-pause-button"
+            className="rhap_button-clear rhap_main-controls-button rhap_play-pause-button"
             type="button"
             onClick={handlePlayPause}
           >
