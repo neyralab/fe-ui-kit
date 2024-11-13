@@ -286,6 +286,14 @@ var MessageType;
     MessageType["CACHE_CLEARED"] = "CACHE_CLEARED";
 })(MessageType || (MessageType = {}));
 
+var ErrorMessages;
+(function (ErrorMessages) {
+    ErrorMessages["SERVICE_WORKER_UNSUPPORTED"] = "Service Workers are not supported in this browser.";
+    ErrorMessages["SERVICE_WORKER_REGISTRATION_FAILED"] = "Service Worker registration failed.";
+    ErrorMessages["DECRYPTION_KEY_ERROR"] = "The decryption key is invalid. Please check the key and try again.";
+    ErrorMessages["DEFAULT_ERROR"] = "An unexpected error occurred while playing the media.";
+})(ErrorMessages || (ErrorMessages = {}));
+
 var generateVideoUrl = function (slug, decryptionKey) {
     var baseUrl = 'non-existent-url/video.mp4';
     var queryParams = new URLSearchParams({
@@ -324,7 +332,7 @@ var VideoPlayer = function (_a) {
             })
                 .catch(function (error) {
                 console.error('Service Worker registration failed:', error);
-                setError('Service Worker registration failed');
+                setError(ErrorMessages.SERVICE_WORKER_REGISTRATION_FAILED);
             });
             var handleMessage_1 = function (event) {
                 var data = event.data;
@@ -338,7 +346,7 @@ var VideoPlayer = function (_a) {
                             break;
                         case MessageType.API_URL_SAVE_FAILED:
                             console.log('Failed to save API URL:', data.message);
-                            setError('An unexpected error occurred while playing the video.');
+                            setError(ErrorMessages.DEFAULT_ERROR);
                             break;
                         case MessageType.CACHE_CLEARED:
                             cacheCleared$1 = true;
@@ -353,7 +361,7 @@ var VideoPlayer = function (_a) {
             };
         }
         else {
-            setError('Service Workers are not supported in this browser.');
+            setError(ErrorMessages.SERVICE_WORKER_UNSUPPORTED);
         }
     }, []);
     useEffect(function () {
@@ -436,7 +444,7 @@ var AudioPlayer = function (_a) {
             })
                 .catch(function (error) {
                 console.error('Service Worker registration failed:', error);
-                setError('Service Worker registration failed');
+                setError(ErrorMessages.SERVICE_WORKER_REGISTRATION_FAILED);
             });
             var handleMessage_1 = function (event) {
                 var data = event.data;
@@ -450,7 +458,7 @@ var AudioPlayer = function (_a) {
                             break;
                         case MessageType.API_URL_SAVE_FAILED:
                             console.log('Failed to save API URL:', data.message);
-                            setError('An unexpected error occurred while playing the audio.');
+                            setError(ErrorMessages.DEFAULT_ERROR);
                             break;
                         case MessageType.CACHE_CLEARED:
                             cacheCleared = true;
@@ -465,7 +473,7 @@ var AudioPlayer = function (_a) {
             };
         }
         else {
-            setError('Service Workers are not supported in this browser.');
+            setError(ErrorMessages.SERVICE_WORKER_UNSUPPORTED);
         }
     }, []);
     useEffect(function () {
@@ -599,4 +607,4 @@ var AudioController = function (_a) {
                                 } }) }) }), jsxs("div", { className: "rhap_volume-container", children: [jsx("button", { type: "button", className: "rhap_button-clear rhap_volume-button", onClick: handleMuteUnmute, children: isMuted ? jsx(MutedVolumeIcon, {}) : jsx(UnmutedVolumeIcon, {}) }), jsx("div", { role: "progressbar", "aria-label": "Volume control", "aria-valuemin": 0, "aria-valuemax": 100, "aria-valuenow": volume, tabIndex: 0, className: "rhap_volume-bar-area", onClick: handleVolume, children: jsx("div", { className: "rhap_volume-bar", children: jsx("div", { className: "rhap_volume-indicator", style: { left: "".concat(volume, "%") } }) }) })] })] }), jsx("div", { className: "rhap_controls-section", children: jsx("div", { className: "rhap_main-controls", children: jsx("button", { "aria-label": "Play", className: "rhap_button-clear rhap_main-controls-button rhap_play-pause-button", type: "button", onClick: handlePlayPause, children: isPlaying ? jsx(PauseIcon, {}) : jsx(PlayIcon, {}) }) }) })] }));
 };
 
-export { AudioController, AudioPlayer, AudioSVGImage, Border, BorderNotification, Button, ChatBlock, ChatMessage, Input, NotificationBubble, Sidebar, SidebarBlock, SmallLogo, VideoPlayer };
+export { AudioController, AudioPlayer, AudioSVGImage, Border, BorderNotification, Button, ChatBlock, ChatMessage, ErrorMessages, Input, NotificationBubble, Sidebar, SidebarBlock, SmallLogo, VideoPlayer };

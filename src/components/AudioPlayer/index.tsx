@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { MessageType } from '../../types/MessageType';
+import { ErrorMessages } from '../../types/ErrorMessages';
 
 interface AudioPlayerProps {
   slug: string;
@@ -78,7 +79,7 @@ const AudioPlayer = ({
         })
         .catch((error) => {
           console.error('Service Worker registration failed:', error);
-          setError('Service Worker registration failed');
+          setError(ErrorMessages.SERVICE_WORKER_REGISTRATION_FAILED);
         });
 
       const handleMessage = (event: MessageEvent) => {
@@ -93,7 +94,7 @@ const AudioPlayer = ({
               break;
             case MessageType.API_URL_SAVE_FAILED:
               console.log('Failed to save API URL:', data.message);
-              setError('An unexpected error occurred while playing the audio.');
+              setError(ErrorMessages.DEFAULT_ERROR);
               break;
             case MessageType.CACHE_CLEARED:
               cacheCleared = true;
@@ -111,7 +112,7 @@ const AudioPlayer = ({
         navigator.serviceWorker.removeEventListener('message', handleMessage);
       };
     } else {
-      setError('Service Workers are not supported in this browser.');
+      setError(ErrorMessages.SERVICE_WORKER_UNSUPPORTED);
     }
   }, []);
 

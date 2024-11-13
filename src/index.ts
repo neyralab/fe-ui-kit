@@ -15,3 +15,4 @@ export { default as VideoPlayer } from './components/VideoPlayer';
 export { default as AudioPlayer } from './components/AudioPlayer';
 export { default as AudioSVGImage } from './components/AudioSVGImage';
 export { default as AudioController } from './components/AudioController';
+export { ErrorMessages } from './types/ErrorMessages';

@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import ReactPlayer, { ReactPlayerProps } from 'react-player';
 import { MessageType } from '../../types/MessageType';
 import { OnProgressProps } from 'react-player/base';
+import { ErrorMessages } from '../../types/ErrorMessages';
 
 interface VideoPlayerProps {
   slug: string;
@@ -88,7 +89,7 @@ const VideoPlayer = ({
         })
         .catch((error) => {
           console.error('Service Worker registration failed:', error);
-          setError('Service Worker registration failed');
+          setError(ErrorMessages.SERVICE_WORKER_REGISTRATION_FAILED);
         });
 
       const handleMessage = (event: MessageEvent) => {
@@ -103,7 +104,7 @@ const VideoPlayer = ({
               break;
             case MessageType.API_URL_SAVE_FAILED:
               console.log('Failed to save API URL:', data.message);
-              setError('An unexpected error occurred while playing the video.');
+              setError(ErrorMessages.DEFAULT_ERROR);
               break;
             case MessageType.CACHE_CLEARED:
               cacheCleared = true;
@@ -121,7 +122,7 @@ const VideoPlayer = ({
         navigator.serviceWorker.removeEventListener('message', handleMessage);
       };
     } else {
-      setError('Service Workers are not supported in this browser.');
+      setError(ErrorMessages.SERVICE_WORKER_UNSUPPORTED);
     }
   }, []);
 
