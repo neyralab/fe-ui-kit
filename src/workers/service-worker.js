@@ -7,6 +7,7 @@ importScripts(`${basePath}/bundle.umd.js`);
 const CACHE_KEYS = {
   CONFIG: 'config-cache',
   TOKEN: 'token-cache',
+  CIDS: 'cids-cache',
   ENTRY: 'entry-file-cache',
   VIDEO: 'video-cache',
   AUDIO: 'audio-cache',
@@ -16,6 +17,7 @@ const CACHE_KEYS = {
 const EXPIRATION_TIMES = {
   [CACHE_KEYS.TOKEN]: 300000, // 5 minutes
   [CACHE_KEYS.ENTRY]: 300000, // 5 minutes
+  [CACHE_KEYS.CIDS]: 60 * 60 * 1000, // 1 hour
   [CACHE_KEYS.VIDEO]: 30 * 24 * 60 * 60 * 1000, // 1 month
   [CACHE_KEYS.AUDIO]: 30 * 24 * 60 * 60 * 1000, // 1 month
 };
@@ -182,6 +184,19 @@ async function handleMedia(event, mediaType) {
       isEncrypted,
     });
 
+    let cids;
+    if (isOnStorageProvider) {
+      cids = await fetchCIDsWithCache({
+        apiUrl,
+        slug,
+        level,
+        jwt_ott: tokenResponse.jwt_ott,
+      });
+      if (!cids || cids.error) {
+        return createErrorResponse(cids?.error, 400, mediaType);
+      }
+    }
+
     const headers = {
       'Content-Range': `bytes ${start}-${end}/${fileSize}`,
       'Accept-Ranges': 'bytes',
@@ -204,6 +219,7 @@ async function handleMedia(event, mediaType) {
                       chunkIndex,
                       level,
                       key,
+                      cids,
                     })
                   : await downloadFromBackend({
                       file,
@@ -248,14 +264,12 @@ async function handleMedia(event, mediaType) {
   }
 }
 
-async function isCacheValid(cachedResponse) {
+async function isCacheValid(cachedResponse, cacheKey) {
   const cacheTime = cachedResponse.headers.get('date');
   if (cacheTime) {
     const cachedDate = new Date(cacheTime);
     const currentTime = Date.now();
-    return (
-      currentTime - cachedDate.getTime() < EXPIRATION_TIMES[CACHE_KEYS.TOKEN]
-    );
+    return currentTime - cachedDate.getTime() < EXPIRATION_TIMES[cacheKey];
   }
   return false;
 }
@@ -265,7 +279,7 @@ async function fetchTokenWithCache(apiUrl, slug) {
   const cachedResponse = await cache.match(slug);
 
   if (cachedResponse) {
-    if (await isCacheValid(cachedResponse)) {
+    if (await isCacheValid(cachedResponse, CACHE_KEYS.TOKEN)) {
       return await cachedResponse.json();
     } else {
       await cache.delete(slug);
@@ -289,7 +303,7 @@ async function fetchFileMetadataWithCache(apiUrl, slug, jwt_ott) {
   const cachedResponse = await cache.match(slug);
 
   if (cachedResponse) {
-    if (await isCacheValid(cachedResponse)) {
+    if (await isCacheValid(cachedResponse, CACHE_KEYS.ENTRY)) {
       return await cachedResponse.json();
     } else {
       await cache.delete(slug);
@@ -368,16 +382,43 @@ async function createErrorResponse(message, statusCode, mediaType) {
   return response;
 }
 
-function getCIDs(cid, level) {
-  if (level === 'interim') {
-    return cid.nodes.map((node) => node.cid);
-  } else if (level === 'upload') {
-    return cid.nodes.flatMap((node) =>
-      node.nodes ? node.nodes.map((subNode) => subNode.cid) : node.cid
-    );
-  } else {
-    throw new Error('Unknown level: ' + level);
+async function fetchCIDsWithCache({ apiUrl, slug, jwt_ott, level }) {
+  const cache = await caches.open(CACHE_KEYS.CIDS);
+  const cachedResponse = await cache.match(slug);
+
+  if (cachedResponse) {
+    if (await isCacheValid(cachedResponse, CACHE_KEYS.CIDS)) {
+      return await cachedResponse.json();
+    } else {
+      await cache.delete(slug);
+    }
   }
+
+  const response = await fetchCIDs({ apiUrl, slug, jwt_ott, level });
+  if (response && !response.error) {
+    await cache.put(
+      slug,
+      new Response(JSON.stringify(response), {
+        headers: { Date: new Date().toUTCString() },
+      })
+    );
+  }
+  return response;
+}
+
+async function fetchCIDs({ apiUrl, slug, jwt_ott, level }) {
+  const response = await fetch(`${apiUrl}/files/file/cid/${slug}/${level}`, {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json',
+      'X-Download-OTT-JWT': jwt_ott,
+    },
+  });
+  const data = await response.json();
+  if (!response.ok) {
+    return { error: data.errors || 'Failed to fetch CIDs.' };
+  }
+  return data.cids;
 }
 
 async function downloadFromStorageProvider({
@@ -386,8 +427,8 @@ async function downloadFromStorageProvider({
   chunkIndex,
   key,
   level,
+  cids,
 }) {
-  const cids = getCIDs(file.cid, level);
   const cid = cids[chunkIndex];
 
   return await self['client-gateway'].downloadFileFromSP({
