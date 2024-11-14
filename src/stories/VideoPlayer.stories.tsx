@@ -81,15 +81,3 @@ export const Default: Story = {
     apiUrl,
   },
 };
-
-// encrypt & filecoin
-const slug = '19bf1c1c-bee3-49e1-843b-09c111428562';
-const key = 'ecfyOKfjKsLU3rLQuN02qRda6QarksZnt+o2J0iCz78=';
-
-export const EncryptAndFilecoin: Story = {
-  args: {
-    slug: slug,
-    decryptionKey: key,
-    apiUrl,
-  },
-};
