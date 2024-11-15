@@ -229,9 +229,7 @@ async function handleMedia(event, mediaType) {
                     });
 
                 if (readable?.failed || !readable) {
-                  return controller.error(
-                    new Error(readable?.message ?? DEFAULT_ERROR_MESSAGE)
-                  );
+                  throw new Error(readable?.message ?? DEFAULT_ERROR_MESSAGE);
                 }
 
                 await caches.open(CACHE_KEYS[mediaType]).then((cache) => {
@@ -252,7 +250,10 @@ async function handleMedia(event, mediaType) {
             }
             controller.close();
           } catch (error) {
-            controller.error(new Error(DEFAULT_ERROR_MESSAGE));
+            const message = error?.message || DEFAULT_ERROR_MESSAGE;
+            await sendErrorToClients(message, mediaType);
+
+            controller.error(error);
           }
         })();
       },
@@ -363,6 +364,17 @@ function extractParams(request) {
   };
 }
 
+async function sendErrorToClients(message, mediaType) {
+  const clients = await self.clients.matchAll({ includeUncontrolled: true });
+
+  clients.forEach((client) => {
+    client.postMessage({
+      type: mediaType === MEDIA_TYPES.VIDEO ? 'VIDEO_ERROR' : 'AUDIO_ERROR',
+      message,
+    });
+  });
+}
+
 async function createErrorResponse(message, statusCode, mediaType) {
   const response = new Response(JSON.stringify({ error: message }), {
     status: statusCode,
@@ -370,14 +382,7 @@ async function createErrorResponse(message, statusCode, mediaType) {
       'Content-Type': 'application/json',
     },
   });
-
-  const clients = await self.clients.matchAll({ includeUncontrolled: true });
-  clients.forEach((client) => {
-    client.postMessage({
-      type: mediaType === MEDIA_TYPES.VIDEO ? 'VIDEO_ERROR' : 'AUDIO_ERROR',
-      message,
-    });
-  });
+  await sendErrorToClients(message, mediaType);
 
   return response;
 }
@@ -480,7 +485,7 @@ async function downloadFromBackend({ file, key, tokenResponse, chunkIndex }) {
         error instanceof DOMException ||
         error?.message === 'AES key data must be 128 or 256 bits' ||
         error?.message ===
-          "Failed to execute 'atob' on 'Window': The string to be decoded is not correctly encoded."
+          "Failed to execute 'atob' on 'WorkerGlobalScope': The string to be decoded is not correctly encoded."
       ) {
         return { failed: true, message: DECRYPTION_KEY_ERROR_MESSAGE };
       }
