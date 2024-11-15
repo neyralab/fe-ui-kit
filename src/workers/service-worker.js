@@ -251,7 +251,9 @@ async function handleMedia(event, mediaType) {
             controller.close();
           } catch (error) {
             const message = error?.message || DEFAULT_ERROR_MESSAGE;
-            await sendErrorToClients(message, mediaType);
+            if (!message.includes('ReadableStreamDefaultController')) {
+              await sendErrorToClients(message, mediaType);
+            }
 
             controller.error(error);
           }
