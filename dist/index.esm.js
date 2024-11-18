@@ -305,15 +305,15 @@ var generateVideoUrl = function (slug, decryptionKey) {
 };
 var cacheCleared$1 = false;
 var VideoPlayer = function (_a) {
-    var slug = _a.slug, decryptionKey = _a.decryptionKey, apiUrl = _a.apiUrl, _b = _a.playing, playing = _b === void 0 ? true : _b, _c = _a.loop, loop = _c === void 0 ? false : _c, _d = _a.muted, muted = _d === void 0 ? false : _d, _e = _a.controls, controls = _e === void 0 ? true : _e, _f = _a.playsinline, playsinline = _f === void 0 ? true : _f, _g = _a.width, width = _g === void 0 ? '100%' : _g, _h = _a.height, height = _h === void 0 ? '100%' : _h, onPlay = _a.onPlay, onPause = _a.onPause, onEnded = _a.onEnded, onError = _a.onError, onReady = _a.onReady, onProgress = _a.onProgress, _j = _a.className, className = _j === void 0 ? '' : _j, videoRef = _a.videoRef, _k = _a.playerProps, playerProps = _k === void 0 ? {} : _k;
-    var _l = useState(''), error = _l[0], setError = _l[1];
-    var _m = useState(false), serviceWorkerReady = _m[0], setServiceWorkerReady = _m[1];
-    var _o = useState(''), videoUrl = _o[0], setVideoUrl = _o[1];
-    var _p = useState(false), apiUrlSaved = _p[0], setApiUrlSaved = _p[1];
+    var slug = _a.slug, decryptionKey = _a.decryptionKey, apiUrl = _a.apiUrl, _b = _a.basePath, basePath = _b === void 0 ? '' : _b, _c = _a.playing, playing = _c === void 0 ? true : _c, _d = _a.loop, loop = _d === void 0 ? false : _d, _e = _a.muted, muted = _e === void 0 ? false : _e, _f = _a.controls, controls = _f === void 0 ? true : _f, _g = _a.playsinline, playsinline = _g === void 0 ? true : _g, _h = _a.width, width = _h === void 0 ? '100%' : _h, _j = _a.height, height = _j === void 0 ? '100%' : _j, onPlay = _a.onPlay, onPause = _a.onPause, onEnded = _a.onEnded, onError = _a.onError, onReady = _a.onReady, onProgress = _a.onProgress, _k = _a.className, className = _k === void 0 ? '' : _k, videoRef = _a.videoRef, _l = _a.playerProps, playerProps = _l === void 0 ? {} : _l;
+    var _m = useState(''), error = _m[0], setError = _m[1];
+    var _o = useState(false), serviceWorkerReady = _o[0], setServiceWorkerReady = _o[1];
+    var _p = useState(''), videoUrl = _p[0], setVideoUrl = _p[1];
+    var _q = useState(false), apiUrlSaved = _q[0], setApiUrlSaved = _q[1];
     useEffect(function () {
         if ('serviceWorker' in navigator) {
             navigator.serviceWorker
-                .register('service-worker.js')
+                .register("".concat(basePath, "/service-worker.js"))
                 .then(function (registration) {
                 if (registration.active) {
                     setServiceWorkerReady(true);
@@ -417,15 +417,15 @@ var generateAudioUrl = function (slug, decryptionKey) {
 };
 var cacheCleared = false;
 var AudioPlayer = function (_a) {
-    var slug = _a.slug, decryptionKey = _a.decryptionKey, apiUrl = _a.apiUrl, audioRef = _a.audioRef, onEnded = _a.onEnded, onError = _a.onError, onLoadedMetadata = _a.onLoadedMetadata, onTimeUpdate = _a.onTimeUpdate, onCanPlay = _a.onCanPlay, _b = _a.controls, controls = _b === void 0 ? false : _b, _c = _a.loop, loop = _c === void 0 ? false : _c, _d = _a.muted, muted = _d === void 0 ? false : _d, _e = _a.autoplay, autoplay = _e === void 0 ? false : _e, _f = _a.className, className = _f === void 0 ? '' : _f;
-    var _g = useState(''), error = _g[0], setError = _g[1];
-    var _h = useState(false), serviceWorkerReady = _h[0], setServiceWorkerReady = _h[1];
-    var _j = useState(''), audioUrl = _j[0], setAudioUrl = _j[1];
-    var _k = useState(false), apiUrlSaved = _k[0], setApiUrlSaved = _k[1];
+    var slug = _a.slug, decryptionKey = _a.decryptionKey, apiUrl = _a.apiUrl, _b = _a.basePath, basePath = _b === void 0 ? '' : _b, audioRef = _a.audioRef, onEnded = _a.onEnded, onError = _a.onError, onLoadedMetadata = _a.onLoadedMetadata, onTimeUpdate = _a.onTimeUpdate, onCanPlay = _a.onCanPlay, _c = _a.controls, controls = _c === void 0 ? false : _c, _d = _a.loop, loop = _d === void 0 ? false : _d, _e = _a.muted, muted = _e === void 0 ? false : _e, _f = _a.autoplay, autoplay = _f === void 0 ? false : _f, _g = _a.className, className = _g === void 0 ? '' : _g;
+    var _h = useState(''), error = _h[0], setError = _h[1];
+    var _j = useState(false), serviceWorkerReady = _j[0], setServiceWorkerReady = _j[1];
+    var _k = useState(''), audioUrl = _k[0], setAudioUrl = _k[1];
+    var _l = useState(false), apiUrlSaved = _l[0], setApiUrlSaved = _l[1];
     useEffect(function () {
         if ('serviceWorker' in navigator) {
             navigator.serviceWorker
-                .register('service-worker.js')
+                .register("".concat(basePath, "/service-worker.js"))
                 .then(function (registration) {
                 if (registration.active) {
                     setServiceWorkerReady(true);

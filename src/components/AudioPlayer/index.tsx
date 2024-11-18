@@ -6,6 +6,7 @@ interface AudioPlayerProps {
   slug: string;
   apiUrl: string;
   decryptionKey?: string;
+  basePath?: string;
 
   audioRef: React.RefObject<HTMLAudioElement>;
   onEnded?: () => void;
@@ -40,6 +41,7 @@ const AudioPlayer = ({
   slug,
   decryptionKey,
   apiUrl,
+  basePath = '',
   audioRef,
   onEnded,
   onError,
@@ -60,7 +62,7 @@ const AudioPlayer = ({
   useEffect(() => {
     if ('serviceWorker' in navigator) {
       navigator.serviceWorker
-        .register('service-worker.js')
+        .register(`${basePath}/service-worker.js`)
         .then((registration) => {
           if (registration.active) {
             setServiceWorkerReady(true);

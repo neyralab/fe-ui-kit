@@ -8,6 +8,7 @@ interface VideoPlayerProps {
   slug: string;
   decryptionKey?: string;
   apiUrl: string;
+  basePath?: string;
 
   playing?: boolean;
   loop?: boolean;
@@ -45,6 +46,7 @@ const VideoPlayer = ({
   slug,
   decryptionKey,
   apiUrl,
+  basePath = '',
   playing = true,
   loop = false,
   muted = false,
@@ -70,7 +72,7 @@ const VideoPlayer = ({
   useEffect(() => {
     if ('serviceWorker' in navigator) {
       navigator.serviceWorker
-        .register('service-worker.js')
+        .register(`${basePath}/service-worker.js`)
         .then((registration) => {
           if (registration.active) {
             setServiceWorkerReady(true);
