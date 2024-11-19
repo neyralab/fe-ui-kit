@@ -115,8 +115,6 @@ self.addEventListener('fetch', function (event) {
     event.respondWith(handleMedia(event, MEDIA_TYPES.VIDEO));
   } else if (requestUrl.includes(AUDIO_URL)) {
     event.respondWith(handleMedia(event, MEDIA_TYPES.AUDIO));
-  } else {
-    event.respondWith(fetch(event.request));
   }
 });
 
